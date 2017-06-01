@@ -2,7 +2,7 @@
 
 CAENCOMM=CAENComm-1.2
 CAENCOMMINC=$(CAENCOMM)/include
-CAENCOMMLIB=$(CAENCOM)lib
+CAENCOMMLIB=$(CAENCOMM)/lib
 
 # Location of CAENVMElib:
 
@@ -22,7 +22,7 @@ CAENDGTZLIB=$(CAENDGTZ)/lib
 CAENCXXFLAGS= -I$(CAENDGTZINC) -I$(CAENVMEINC) -I$(CAENCOMMINC)
 CAENLDFLAGS= 	-L$(CAENDGTZLIB) -lCAENDigitizer -Wl,-rpath=$(CAENDGTZLIB)   \
 		-L$(CAENVMELIB)  -lCAENVME       -Wl,-rpath=$(CAENVMELIB)    \
-		-L$(CAENCOMMLIB) -lCAENComm      -Wl,-rpath-$(CAENCOMMLIB)
+		-L$(CAENCOMMLIB) -lCAENComm      -Wl,-rpath=$(CAENCOMMLIB)
 all: parser
 
 parser:  parser.cpp libCaenPha.a libpugi.a
@@ -38,7 +38,7 @@ libpugi.a: pugixml.cpp pugixml.hpp pugiconfig.hpp pugiutils.h pugiutils.cpp
 
 
 libCaenPha.a:  CAENPhaParameters.h CAENPhaParameters.cpp  CAENPhaChannelParameters.h CAENPhaChannelParameters.cpp \
-	CAENPha.h CAENPHa.cpp											\
+	CAENPha.h CAENPha.cpp											\
 	libpugi.a
 	g++ -c $(CAENCXXFLAGS) CAENPhaParameters.cpp -std=c++11
 	g++ -c $(CAENCXXFLAGS) CAENPhaChannelParameters.cpp -std=c++11
