@@ -16,20 +16,20 @@ CAENDGTZ=CAENDigitizer_2.7.9
 CAENDGTZINC=$(CAENDGTZ)/include
 CAENDGTZLIB=$(CAENDGTZ)/lib
 
+DAQROOT=/usr/opt/daq/11.2-005
+NSCLDAQCXXFLAGS=-I$(DAQROOT)/include/sbsreadout
+INIPARSERCXXFLAGS=-Iiniparser/include
+
 
 # Caen compilation flags:
 
-CAENCXXFLAGS= -I$(CAENDGTZINC) -I$(CAENVMEINC) -I$(CAENCOMMINC)
-CAENLDFLAGS= 	-L$(CAENDGTZLIB) -lCAENDigitizer -Wl,-rpath=$(CAENDGTZLIB)   \
+CAENCXXFLAGS= -g -I$(CAENDGTZINC) -I$(CAENVMEINC) -I$(CAENCOMMINC)
+CAENLDFLAGS=  -g -L$(CAENDGTZLIB) -lCAENDigitizer -Wl,-rpath=$(CAENDGTZLIB)   \
 		-L$(CAENVMELIB)  -lCAENVME       -Wl,-rpath=$(CAENVMELIB)    \
 		-L$(CAENCOMMLIB) -lCAENComm      -Wl,-rpath=$(CAENCOMMLIB)
-all: parser
+all: libpugi.a libCaenPha.a
 
-parser:  parser.cpp libCaenPha.a libpugi.a
-	g++ -g -o parser  parser.cpp    \
-	-L. -lCaenPha  -lpugi		\
-	$(CAENLDFLAGS)                  \
-	-std=c++11
+
 
 libpugi.a: pugixml.cpp pugixml.hpp pugiconfig.hpp pugiutils.h pugiutils.cpp
 	g++ -c pugixml.cpp -std=c++11
@@ -38,9 +38,24 @@ libpugi.a: pugixml.cpp pugixml.hpp pugiconfig.hpp pugiutils.h pugiutils.cpp
 
 
 libCaenPha.a:  CAENPhaParameters.h CAENPhaParameters.cpp  CAENPhaChannelParameters.h CAENPhaChannelParameters.cpp \
-	CAENPha.h CAENPha.cpp											\
-	libpugi.a
+	CAENPha.h CAENPha.cpp PHAEventSegment.h PHAEventSegment.cpp config.h config.cpp DPPConfig.h DPPConfig.cpp \
+	PHATrigger.h PHATrigger.cpp PHAMultiModuleSegment.h PHAMultiModuleSegment.cpp \
+	libpugi.a 
 	g++ -c $(CAENCXXFLAGS) CAENPhaParameters.cpp -std=c++11
 	g++ -c $(CAENCXXFLAGS) CAENPhaChannelParameters.cpp -std=c++11
 	g++ -c $(CAENCXXFLAGS) CAENPha.cpp  -std=c++11
-	ar crs libCaenPha.a CAENPha.o  CAENPhaParameters.o CAENPhaChannelParameters.o
+	g++ -c $(CAENCXXFLAGS) $(INIPARSERCXXFLAGS) config.cpp
+	g++ -c $(CAENCXXFLAGS) $(INIPARSERCXXFLAGS) DPPConfig.cpp
+	g++ -c $(CAENCXXFLAGS) $(NSCLDAQCXXFLAGS) $(INIPARSERCXXFLAGS) \
+				 PHAEventSegment.cpp -std=c++11
+	g++ -c $(CAENCXXFLAGS) $(NSCLDAQCXXFLAGS)  \
+				 PHATrigger.cpp -std=c++11
+	g++ -c $(CAENCXXFLAGS) $(NSCLDAQCXXFLAGS)  \
+				 PHAMultiModuleSegment.cpp -std=c++11
+	ar crs libCaenPha.a config.o DPPConfig.o CAENPha.o  CAENPhaParameters.o \
+		CAENPhaChannelParameters.o PHAEventSegment.o PHATrigger.o PHAMultiModuleSegment.o
+
+
+clean:
+	rm -f libCaenPha.a
+	rm -f *.o

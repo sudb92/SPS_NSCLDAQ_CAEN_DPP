@@ -51,7 +51,7 @@ public:
 
   // <EnergyFilter> parameters:
 
-  unsigned decayTime;
+  double    decayTime;
   double   trapRiseTime;
   double   flattopDelay;
   double   trapFlatTop ;

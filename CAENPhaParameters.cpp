@@ -139,11 +139,15 @@ CAENPhaParameters::processTopNode(pugi::xml_node aNode)
 void
 CAENPhaParameters::getAcquisitionSettings(pugi::xml_node aNode)
 {
+     // Note mispelled in the CAEN XML - may need to fix this if they do.
+  pugi::xml_node modenode = getNodeByNameOrThrow(aNode, "AcquisitonMode", "No <AcquisitonMode> tag in <acquistionsettings>");
+  acqMode = getUnsignedValue(modenode);
+
   pugi::xml_node pretrg = getNodeByName(aNode, "Pre-Triggers");
   pugi::xml_node reclen = getNodeByName(aNode, "RecordLength");
 
   if((pretrg.type() == pugi::node_null) || (reclen.type() == pugi::node_null)) {
-    std::string msg( "Not a config file - <acquisitionmode> is missing one of <Pre-Triggers> or <RecordLength>");
+    std::string msg( "Not a config file - <acquisitionsettings> is missing one of <Pre-Triggers> or <RecordLength>");
     std::cerr << msg << std::endl;
     throw:: std::domain_error(msg);
   }
@@ -373,8 +377,10 @@ CAENPhaParameters::getChannelCoincidenceSettings(unsigned ch, pugi::xml_node top
   std::string opString = getStringContents(op);
   if (opString == "CAENDPP_CoincOp_OR") {
     result.s_operation = Or;
-  } else {
+  } else if (opString == "CAENDPP_CoincOp_AND") {
     result.s_operation = And;
+  } else {
+    result.s_operation = Majority;
   }
 
   pugi::xml_node mask = getNodeByName(top, "CoincidenceMask");
@@ -422,8 +428,10 @@ CAENPhaParameters::decodeTriggerControl(pugi::xml_node node)
   std::string strValue = getStringContents(node);
   if (strValue == "CAENDPP_TriggerControl_Internal") {
     return internal;
-  } else {
+  } else if (strValue == "CAENDPP_TriggerControl_External")  {
     return external;
+  } else {
+    return both;
   }
 }
 

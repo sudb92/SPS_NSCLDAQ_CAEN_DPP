@@ -129,7 +129,7 @@ CAENPhaChannelParameters::getEnergyFilterParams(pugi::xml_node eparams)
     std::cerr << msg << std::endl;
     throw std::domain_error(msg);
   }
-  decayTime = getUnsignedValue(dtimeNode);
+  decayTime = getDoubleValue(dtimeNode);
 
   // <TrapRiseTime>
 

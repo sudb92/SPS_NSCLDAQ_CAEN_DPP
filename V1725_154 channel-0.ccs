@@ -2,7 +2,7 @@
 <config>
   <InputSignal>
     <DCOffset>
-      <value>15007</value>
+      <value>15000.0633096818</value>
     </DCOffset>
     <InputDigitalGain>
       <value>0</value>
@@ -52,27 +52,27 @@
       <option-103>CAENDPP_InputRange_X256</option-103>
       <option-104>CAENDPP_InputRange_X500</option-104>
       <option--1>CAENDPP_InputRange_UNKN</option--1>
-      <value>9</value>
+      <value>10</value>
     </InputRange>
   </InputSignal>
   <EnergyFilter>
     <DecayTime>
-      <value>5</value>
+      <value>2.4</value>
     </DecayTime>
     <TrapRiseTime>
-      <value>8.2</value>
+      <value>2</value>
     </TrapRiseTime>
     <FlatTopDelay>
-      <value>1.2</value>
+      <value>0.0</value>
     </FlatTopDelay>
     <TrapFlatTop>
-      <value>1.9</value>
+      <value>1</value>
     </TrapFlatTop>
     <BLMean>
       <value>0</value>
     </BLMean>
     <TrapeziodGain>
-      <value>1</value>
+      <value>3</value>
     </TrapeziodGain>
     <OTREJ>
       <value>0</value>
@@ -81,28 +81,28 @@
       <value>0</value>
     </PeakMean>
     <BLHoldoff>
-      <value>0.5</value>
+      <value>2</value>
     </BLHoldoff>
     <PeakHoldoff>
-      <value>1</value>
+      <value>5</value>
     </PeakHoldoff>
   </EnergyFilter>
   <Trigger>
     <Threshold>
-      <value>3042</value>
+      <value>250</value>
     </Threshold>
     <RC-CR2Smoothing>
       <value>16</value>
     </RC-CR2Smoothing>
     <InputRiseTime>
-      <value>0.4</value>
+      <value>1.0</value>
     </InputRiseTime>
     <TriggerHoldoff>
-      <value>5.04</value>
+      <value>0.5</value>
     </TriggerHoldoff>
     <RTDiscriminationWindow>
       <TrgValidationWidth>
-        <value>0.21</value>
+        <value>2.0</value>
       </TrgValidationWidth>
       <CoincidenceWindow>
         <option-0>no</option-0>

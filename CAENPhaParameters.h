@@ -25,7 +25,7 @@
 */
 
 #ifndef CAENPHAPARAMETERS_H
-#define CAENPAHPARAMETERS_H
+#define CAENPHAPARAMETERS_H
 #include "pugixml.hpp"
 #include <vector>
 #include <string>
@@ -45,10 +45,10 @@ private:
 
 public:
   typedef enum _CoincidenceOp   {
-    Or, And
+    Or, And, Majority
   } CoincidenceOp;
   typedef enum _TriggerControl {
-    internal, external
+    internal, external, both
   } TriggerControl;
   typedef enum _GPIOLogic {
     Logic_OR, Logic_AND
@@ -70,6 +70,8 @@ public:
     unsigned            s_window;
   } ChannelCoincidenceSettings, *pChannelCoincidenceSettings;
 
+
+  int  acqMode;
   double preTriggers;
   int    recordLength;
   std::vector <ChannelCoincidenceSettings> coincidenceSettings;
