@@ -143,7 +143,7 @@ bool
 getBoolValue(pugi::xml_node node)
 {
   std::string strValue = getValue(node);
-  return !(strValue == "False");
+  return ! ((strValue == "False") || (strValue == "false"));  // Compass uses lower cases
 }
 /**
  * getStringContents
@@ -196,4 +196,31 @@ getBoolContents(pugi::xml_node node)
 {
   std::string strData = getStringContents(node);
   return (strData == "True") ? true : false;
+}
+/**
+ * getAllByName
+ *    Returns a vector of nodes whose names are given by the search string.
+ *    It is not an error to fail to find any matches.  That just results
+ *    in an empty vector.
+ *
+ *   @param parent  - node that is the parent of the search space.
+ *   @param name    - Name of searched for node.
+ *   @return std::vector<pugi::xml_node>  Vector of the nodes found.
+ */
+std::vector<pugi::xml_node>
+getAllByName(pugi::xml_node parent, const char* name)
+{
+  std::string n(name);                 // For compares.
+  std::vector<pugi::xml_node> result;
+  
+  pugi::xml_node child = parent.first_child();
+  do {
+    if(child.name() == n) {
+      result.push_back(child);
+    }
+    
+    child = child.next_sibling();
+  } while (child != pugi::node_null);
+  
+  return result;
 }

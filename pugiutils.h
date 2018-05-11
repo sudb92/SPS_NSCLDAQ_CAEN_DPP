@@ -28,7 +28,7 @@
 
 #include "pugixml.hpp"
 #include <string>
-
+#include <vector>
 
 pugi::xml_node getNodeByName(pugi::xml_node treetop, const char* name);
 pugi::xml_node getNodeByNameOrThrow(pugi::xml_node treetop, const char* name, const char* msg);
@@ -39,6 +39,7 @@ bool        getBoolValue(pugi::xml_node node);
 std::string getStringContents(pugi::xml_node node);
 unsigned    getUnsignedContents(pugi::xml_node node);
 bool        getBoolContents(pugi::xml_node node);
+std::vector<pgi::xml_node> getAllByName(pugi::xml_node parent, const char* name);
 
 
 

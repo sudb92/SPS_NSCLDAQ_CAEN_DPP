@@ -10,9 +10,12 @@
  * @param doc -the XML document parsed by pugixml.
  */
 CAENPhaChannelParameters::CAENPhaChannelParameters(pugi::xml_document& doc) :
-  m_xml(doc) {}
+  m_xml(doc) {},
+  enabled(true),           // For MCA2 where thre's no separate enabled.
+  psdCutEnable(false)      // MCSA2 has no PDS low/high cuts.
+  {}
 
-
+ 
 /**
  * unpack
  *   Travel the dom tree unpacking the parsed XML into parameters.

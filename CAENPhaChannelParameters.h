@@ -41,6 +41,11 @@ public:
   typedef enum _Polarity {positive, negative} Polarity;
   typedef enum _Coupling {ac, dc} Coupling;
 
+  // Compass uses a sepasrate enable...
+  // M2C just doesn't have us present if not enabled:
+  
+  bool enabled;
+  
   // <InputSignal> parameters: 
 
   unsigned  dcOffset;
@@ -61,6 +66,7 @@ public:
   unsigned peakMean;
   double   baselineHoldoff;
   unsigned peakHoldoff;
+  double   trapPeaking;
   
   // <Trigger> Parameters:
 
@@ -70,6 +76,7 @@ public:
   double   triggerHoldoff;
   double   triggerValidationWidth;    // in <RTDiscriminationWIndow> subtag.
   bool     coincidenceWindow;        //          ""     ""
+  double   preTrigger;               // Add in MCA2
 
   // <TransistorReset> parameters:
 
@@ -86,12 +93,21 @@ public:
   bool       fastTriggerCorrection;
   bool       baselineClip;
   unsigned   baselineAdjust;
-  unsigned   acPoleZero;
+  double     acPoleZero;
   Coupling   inputCoupling;
   
+  
+  // New COMPASS parameters.
+  
+  bool psdCutEnable;
+  double psdLowCut;
+  double psdHighCut;
 
 public:
   CAENPhaChannelParameters(pugi::xml_document& doc);
+  CAENPhaChannelParameters() {}          // Default constructor
+  CAENPhaChannelParameters(const CAENPhaChannelParameters& rhs);
+  CAENPhaChannelParameters& operator=(const CAENPhaChannelParameters& rhs);
 
   void unpack();
   

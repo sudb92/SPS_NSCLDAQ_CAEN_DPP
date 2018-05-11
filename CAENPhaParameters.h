@@ -29,6 +29,8 @@
 #include "pugixml.hpp"
 #include <vector>
 #include <string>
+#include <CAENDigitizer.h>
+#include <CAENDigitizerType.h>
 
 class CAENPhaChannelParameters;
 
@@ -72,11 +74,13 @@ public:
 
 
   int  acqMode;
+  unsigned startDelay;
   double preTriggers;
   int    recordLength;
   std::vector <ChannelCoincidenceSettings> coincidenceSettings;
 
-  bool              dualTrace;
+  vool         waveforms;
+  bool         dualTrace;
   unsigned     analogTrace1;
   unsigned     analogTrace2;
   unsigned     digitalTrace1;
@@ -100,13 +104,18 @@ public:
 
   GPIOGroupConfig groupconfigs[2];
 
+  // With compass:
+  
+  CAEN_DGTZ_AcqMode_t s_startMode;
+  
   // Decoded channel parameters.
 
   std::vector<std::pair<unsigned, CAENPhaChannelParameters*> > m_channelParameters;
-
+  
   
 public:
   CAENPhaParameters(pugi::xml_document& m_dom, std::vector<std::pair<unsigned, pugi::xml_document*> >& channelDoms);
+  CAENPhaParameters() {}                // Default constructor
   ~CAENPhaParameters();
 
 

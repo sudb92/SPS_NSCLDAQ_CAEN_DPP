@@ -50,6 +50,68 @@ CAENPhaParameters::CAENPhaParameters(
   m_dom(dom),
   m_channelDoms(chDoms)
 {}
+/**
+ * Copy construction.
+ *
+ * @param rhs - the object that will be copy constructed into *this.
+ */
+CAENPhaParameters::CAENPhaParameters(const CAENPhaParameters& rhs)
+{
+  *this = rhs;
+}
+/**
+ * Assignment
+ *    copies the rhs into this -- if the rhs is distinct from this.
+ *
+ *  @param rhs - the guy to copy
+ *  @return *this
+ */
+CAENPhaParameters&
+CAENPhaParameters::operator=(const CAENPHAParameters& rhs)
+{
+  if (this != &rhs) {               // Don't bother if not distinct.
+    m_xml = rhs.m_xml;
+    dcOffset = rhs.dcOffset;
+    decimation = rhs.decimation;
+    digitalGain = rhs.digitalGain;
+    polarity  = rhs.polarity;
+    range     = rhs.range;
+    decayTime = rhs.decayTime;
+    trapRiseTime = rhs.trapRiseTime;
+    flattopDelay = rhs.flattopDelay;
+    trapFlatTop  = rhs.trapFlatTop;
+    BLMean = rhs.BLMean;
+    trapGain = rhs.trapGain;
+    otReject = rhs.otReject;
+    peakMean = rhs.peakMean;
+    baselineHoldoff = rhs.baselineHoldoff;
+    peakHoldoff = rhs.peakHoldoff;
+    threshold = rhs.threshold;
+    rccr2smoothing =rhs.rccr2smoothing;
+    inputRiseTime  = rhs.inputRiseTime;
+    triggerHoldoff = rhs.triggerHoldoff;
+    triggerValidationWidth = rhs.triggerValidationWidth;
+    coincidenceWindow = rhs.coincidenceWindow;
+    preTrigger = rhs.preTrigger;
+    trResetEnabled = rhs.trResetEnabled;
+    trGain = rhs.trGain;
+    trThreshold = rhs.trThreshold;
+    trHoldoff = rhs.trHoldoff;
+    energySkim = rhs.energySkim;
+    lld = rhs.lld;
+    uld = rhs.uld;
+    fastTriggerCorrection = rhs.fastTriggerCorrection;
+    baselineClip  = rhs.baselineClip;
+    baselineAdjust= rhs.baselineAdjust;
+    acPoleZero   = rhs.acPoleZero;
+    inputCoupling = rhs.inputCoupling;
+    
+    psdCutEnable = rhs.psdCutEnable;
+    psdLowCut    = rhs.psdLowCut;
+    psdHighCut   = rhs.psdHighCut;
+  }
+  return *this;
+}
 
 /**
  * Destructor:
