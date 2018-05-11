@@ -14,9 +14,9 @@
 
 */
 #include "CompassProject.h"
-#include <pugiutil.h>
-#include <CAENPhaChannelParameters.h>
-#include <CAENPhaParameters.h>
+#include "pugiutils.h"
+#include "CAENPhaChannelParameters.h"
+#include "CAENPhaParameters.h"
 
 #include <stdexcept>
 #include <stdio.h>
@@ -43,7 +43,7 @@ void
 CompassProject::operator()()
 {
     pugi::xml_node config = getNodeByName(m_doc, "configuration");
-    if (config == pugi::node_null) {
+    if (config.type() == pugi::node_null) {
         throw std::invalid_argument("XML File is not a Compass config:  does not have a <configuration> tag");
     }
     std::vector<pugi::xml_node> boards = getAllByName(config, "board");
@@ -57,16 +57,16 @@ CompassProject::operator()()
     // Process the per channel parameters of each board:
     
     
-    std::vector<unsigned, pugi::xml_document&> fakedocs;
-    for (int i = 0; i < board.size(); i++) {
-        CAENPhaParameters* board = new CAENPHaParameters();      // Need some fake docs.
+
+    for (int i = 0; i < boards.size(); i++) {
+        CAENPhaParameters* board = new CAENPhaParameters();     
         ConnectionParameters connection;
         processBoardParameters(boards[i], *board, connection);               // Sets board and defaults.
         
-        board->m_channelParameters = parseBoardChannelConfigs(boards[i]);
+        board->m_channelParameters = parseBoardChannelConfig(boards[i]);
         
         m_boards.push_back(board);
-        m_connection.push_back(connection);
+        m_connections.push_back(connection);
     }
     
 }
@@ -96,7 +96,7 @@ CompassProject::operator()()
  *             the unsigned is the channel number (<index> tag value).
  *             the CAENPhaChannelParameters* points to the processed parameters.
  */
-std::vector<CompassProject::ChannelInfo> >
+std::vector<CompassProject::ChannelInfo>
 CompassProject::parseBoardChannelConfigs(pugi::xml_node board)
 {
     // get the channels:

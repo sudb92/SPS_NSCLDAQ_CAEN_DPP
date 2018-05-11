@@ -31,6 +31,7 @@
 #include <string>
 #include <CAENDigitizer.h>
 #include <CAENDigitizerType.h>
+#include <functional>
 
 class CAENPhaChannelParameters;
 
@@ -40,8 +41,10 @@ class CAENPhaChannelParameters;
  */
 class CAENPhaParameters {
 private:
-  pugi::xml_document& m_dom;
-  std::vector<std::pair<unsigned, pugi::xml_document*> >& m_channelDoms;
+  static pugi::xml_document empty;
+  static std::vector<std::pair<unsigned, pugi::xml_document*> > emptyDoms;
+  std::reference_wrapper<pugi::xml_document> m_dom;
+  std::reference_wrapper<std::vector<std::pair<unsigned, pugi::xml_document*> > > m_channelDoms;
 
   // Settings are public so we don't need getters:
 
@@ -79,7 +82,7 @@ public:
   int    recordLength;
   std::vector <ChannelCoincidenceSettings> coincidenceSettings;
 
-  vool         waveforms;
+  bool         waveforms;
   bool         dualTrace;
   unsigned     analogTrace1;
   unsigned     analogTrace2;
@@ -115,9 +118,10 @@ public:
   
 public:
   CAENPhaParameters(pugi::xml_document& m_dom, std::vector<std::pair<unsigned, pugi::xml_document*> >& channelDoms);
-  CAENPhaParameters() {}                // Default constructor
+  CAENPhaParameters() : m_dom(empty), m_channelDoms(emptyDoms) {}                // Default constructor
+  CAENPhaParameters(const CAENPhaParameters& rhs);
   ~CAENPhaParameters();
-
+  CAENPhaParameters& operator=(const CAENPhaParameters& rhs);
 
 public:
   void unpack();

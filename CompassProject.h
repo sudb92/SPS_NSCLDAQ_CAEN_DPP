@@ -17,18 +17,18 @@
 #ifndef COMPASSPROJECT_H
 #define COMPASSPROJECT_H
 
-#include <pugixml.h>
+#include "pugiutils.h"
 #include <vector>
 #include <string>
 #include "CAENPhaParameters.h"
 #include "CAENPhaChannelParameters.h"
-#include <CAENDigitizerTypes.h>
+#include <CAENDigitizerType.h>
 
 class CAENPhaChannelParameters;
 
 class CompassProject {
 public:
-    std::pair<unsigned, CAENPhaChannelParameters*>  ChannelInfo;
+    typedef std::pair<unsigned, CAENPhaChannelParameters*>  ChannelInfo;
     typedef struct {
         CAEN_DGTZ_ConnectionType s_linkType;
         int                      s_linkNum;

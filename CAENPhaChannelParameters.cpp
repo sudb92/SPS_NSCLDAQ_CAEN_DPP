@@ -4,17 +4,70 @@
 #include <stdexcept>
 #include <cstdlib>
 
+pugi::xml_document  CAENPhaChannelParameters::empty;
 
 /**
  * constructor
  * @param doc -the XML document parsed by pugixml.
  */
 CAENPhaChannelParameters::CAENPhaChannelParameters(pugi::xml_document& doc) :
-  m_xml(doc) {},
+  m_xml(doc),
   enabled(true),           // For MCA2 where thre's no separate enabled.
   psdCutEnable(false)      // MCSA2 has no PDS low/high cuts.
   {}
 
+/**
+ *  assignment
+ *   @param rhs - the object we're being assigned from
+ *   @return *this
+ */
+CAENPhaChannelParameters&
+CAENPhaChannelParameters::operator=(const CAENPhaChannelParameters& rhs)
+{
+  if (this != &rhs) {               // Don't bother if not distinct.
+    m_xml = rhs.m_xml;
+    enabled = rhs.enabled;
+    dcOffset = rhs.dcOffset;
+    decimation = rhs.decimation;
+    digitalGain = rhs.digitalGain;
+    polarity  = rhs.polarity;
+    range     = rhs.range;
+    decayTime = rhs.decayTime;
+    trapRiseTime = rhs.trapRiseTime;
+    flattopDelay = rhs.flattopDelay;
+    trapFlatTop  = rhs.trapFlatTop;
+    BLMean = rhs.BLMean;
+    trapGain = rhs.trapGain;
+    otReject = rhs.otReject;
+    peakMean = rhs.peakMean;
+    baselineHoldoff = rhs.baselineHoldoff;
+    peakHoldoff = rhs.peakHoldoff;
+    threshold = rhs.threshold;
+    rccr2smoothing =rhs.rccr2smoothing;
+    inputRiseTime  = rhs.inputRiseTime;
+    triggerHoldoff = rhs.triggerHoldoff;
+    triggerValidationWidth = rhs.triggerValidationWidth;
+    coincidenceWindow = rhs.coincidenceWindow;
+    preTrigger = rhs.preTrigger;
+    trResetEnabled = rhs.trResetEnabled;
+    trGain = rhs.trGain;
+    trThreshold = rhs.trThreshold;
+    trHoldoff = rhs.trHoldoff;
+    energySkim = rhs.energySkim;
+    lld = rhs.lld;
+    uld = rhs.uld;
+    fastTriggerCorrection = rhs.fastTriggerCorrection;
+    baselineClip  = rhs.baselineClip;
+    baselineAdjust= rhs.baselineAdjust;
+    acPoleZero   = rhs.acPoleZero;
+    inputCoupling = rhs.inputCoupling;
+    
+    psdCutEnable = rhs.psdCutEnable;
+    psdLowCut    = rhs.psdLowCut;
+    psdHighCut   = rhs.psdHighCut;
+  }
+  return *this;
+}
  
 /**
  * unpack
@@ -22,7 +75,7 @@ CAENPhaChannelParameters::CAENPhaChannelParameters(pugi::xml_document& doc) :
  */
 void CAENPhaChannelParameters::unpack()
 {
-  pugi::xml_node top = m_xml.first_child();
+  pugi::xml_node top = m_xml.get().first_child();
   if (std::string("config") != top.name()) {
     std::string msg =  "Top node is not <config> in channel config file\n";
     std::cerr << msg << std::endl;

@@ -35,6 +35,10 @@
 
 
 
+pugi::xml_document CAENPhaParameters::empty;
+std::vector<std::pair<unsigned, pugi::xml_document*> > CAENPhaParameters::emptyDoms;
+
+
 /*-------------------------------------------------------------------------
  *  Implementation of CAENPhaParameters class.
  */
@@ -55,7 +59,8 @@ CAENPhaParameters::CAENPhaParameters(
  *
  * @param rhs - the object that will be copy constructed into *this.
  */
-CAENPhaParameters::CAENPhaParameters(const CAENPhaParameters& rhs)
+CAENPhaParameters::CAENPhaParameters(const CAENPhaParameters& rhs) : 
+  m_dom(rhs.m_dom), m_channelDoms(rhs.m_channelDoms)
 {
   *this = rhs;
 }
@@ -67,50 +72,42 @@ CAENPhaParameters::CAENPhaParameters(const CAENPhaParameters& rhs)
  *  @return *this
  */
 CAENPhaParameters&
-CAENPhaParameters::operator=(const CAENPHAParameters& rhs)
+CAENPhaParameters::operator=(const CAENPhaParameters& rhs)
 {
-  if (this != &rhs) {               // Don't bother if not distinct.
-    m_xml = rhs.m_xml;
-    dcOffset = rhs.dcOffset;
-    decimation = rhs.decimation;
-    digitalGain = rhs.digitalGain;
-    polarity  = rhs.polarity;
-    range     = rhs.range;
-    decayTime = rhs.decayTime;
-    trapRiseTime = rhs.trapRiseTime;
-    flattopDelay = rhs.flattopDelay;
-    trapFlatTop  = rhs.trapFlatTop;
-    BLMean = rhs.BLMean;
-    trapGain = rhs.trapGain;
-    otReject = rhs.otReject;
-    peakMean = rhs.peakMean;
-    baselineHoldoff = rhs.baselineHoldoff;
-    peakHoldoff = rhs.peakHoldoff;
-    threshold = rhs.threshold;
-    rccr2smoothing =rhs.rccr2smoothing;
-    inputRiseTime  = rhs.inputRiseTime;
-    triggerHoldoff = rhs.triggerHoldoff;
-    triggerValidationWidth = rhs.triggerValidationWidth;
-    coincidenceWindow = rhs.coincidenceWindow;
-    preTrigger = rhs.preTrigger;
-    trResetEnabled = rhs.trResetEnabled;
-    trGain = rhs.trGain;
-    trThreshold = rhs.trThreshold;
-    trHoldoff = rhs.trHoldoff;
-    energySkim = rhs.energySkim;
-    lld = rhs.lld;
-    uld = rhs.uld;
-    fastTriggerCorrection = rhs.fastTriggerCorrection;
-    baselineClip  = rhs.baselineClip;
-    baselineAdjust= rhs.baselineAdjust;
-    acPoleZero   = rhs.acPoleZero;
-    inputCoupling = rhs.inputCoupling;
+  if (this != &rhs) {
+    m_dom = rhs.m_dom;
+    m_channelDoms = rhs.m_channelDoms;
+
+    acqMode = rhs.acqMode;
+    startDelay = rhs.startDelay;
+    preTriggers = rhs.preTriggers;
+    recordLength = rhs.recordLength;
+    coincidenceSettings = rhs.coincidenceSettings;
     
-    psdCutEnable = rhs.psdCutEnable;
-    psdLowCut    = rhs.psdLowCut;
-    psdHighCut   = rhs.psdHighCut;
+    waveforms = rhs.waveforms;
+    dualTrace = rhs.dualTrace;
+    analogTrace1 = rhs.analogTrace1;
+    analogTrace2 = rhs.analogTrace2;
+    digitalTrace1 = rhs.digitalTrace2;
+
+    maxEvtsBlt = rhs.maxEvtsBlt;
+    saveMask   = rhs.saveMask;
+    IOLevel    = rhs.IOLevel;
+
+    triggerSource = rhs.triggerSource;
+    gpioLogic = rhs. gpioLogic;
+    transResetLength = rhs.transResetLength;
+    transResetPeriod = rhs.transResetPeriod;
+
+    groupconfigs[0] = rhs.groupconfigs[0];
+    groupconfigs[1] = rhs.groupconfigs[1];
+
+    s_startMode = rhs.s_startMode;
+
+    m_channelParameters = rhs.m_channelParameters;
+
   }
-  return *this;
+  return  *this;
 }
 
 /**
@@ -133,7 +130,9 @@ CAENPhaParameters::~CAENPhaParameters()
 void
 CAENPhaParameters::unpack()
 {
-  pugi::xml_node top = m_dom.first_child();
+  pugi::xml_document& dom(m_dom);
+  
+  pugi::xml_node top = dom.first_child();
   
   if(std::string(top.name()) !=  "config") {
     std::cerr << "Not a config file.. expected config element got " << top.name() << std::endl;
@@ -149,9 +148,9 @@ CAENPhaParameters::unpack()
 
   // Process the channel parametrs to stock m_channelParameters.
 
-  for (auto i = 0; i < m_channelDoms.size(); i++) {
-    unsigned ch = m_channelDoms[i].first;
-    pugi::xml_document& chdoc( *(m_channelDoms[i].second));
+  for (auto i = 0; i < m_channelDoms.get().size(); i++) {
+    unsigned ch = m_channelDoms.get()[i].first;
+    pugi::xml_document& chdoc( *(m_channelDoms.get()[i].second));
     CAENPhaChannelParameters* pChannel = new CAENPhaChannelParameters(chdoc);
     pChannel->unpack();
     m_channelParameters.push_back(std::pair<unsigned, CAENPhaChannelParameters*>(ch, pChannel));

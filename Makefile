@@ -40,7 +40,8 @@ libpugi.a: pugixml.cpp pugixml.hpp pugiconfig.hpp pugiutils.h pugiutils.cpp
 libCaenPha.a:  CAENPhaParameters.h CAENPhaParameters.cpp  CAENPhaChannelParameters.h CAENPhaChannelParameters.cpp \
 	CAENPha.h CAENPha.cpp PHAEventSegment.h PHAEventSegment.cpp config.h config.cpp DPPConfig.h DPPConfig.cpp \
 	PHATrigger.h PHATrigger.cpp PHAMultiModuleSegment.h PHAMultiModuleSegment.cpp \
-	libpugi.a 
+	libpugi.a CompassProject.cpp CompassProject.h CompassEventSegment.cpp CompassEventSegment.h \
+	CompassMultiModuleEventSegment.cpp CompassMultiModuleEventSegment.h  CompassTrigger.cpp CompassTrigger.h
 	g++ -c $(CAENCXXFLAGS) CAENPhaParameters.cpp -std=c++11
 	g++ -c $(CAENCXXFLAGS) CAENPhaChannelParameters.cpp -std=c++11
 	g++ -c $(CAENCXXFLAGS) CAENPha.cpp  -std=c++11
@@ -52,6 +53,14 @@ libCaenPha.a:  CAENPhaParameters.h CAENPhaParameters.cpp  CAENPhaChannelParamete
 				 PHATrigger.cpp -std=c++11
 	g++ -c $(CAENCXXFLAGS) $(NSCLDAQCXXFLAGS)  \
 				 PHAMultiModuleSegment.cpp -std=c++11
+	g++ -c $(CAENCXXFLAGS) $(NSCLDAQCXXFLAGS)  \
+				 CompassProject.cpp -std=c++11
+		g++ -c $(CAENCXXFLAGS) $(NSCLDAQCXXFLAGS)  \
+				 CompassEventSegment.cpp.cpp -std=c++11
+	g++ -c $(CAENCXXFLAGS) $(NSCLDAQCXXFLAGS)  \
+				 CompassMultiModuleEvebtSegment.cpp -std=c++11
+	g++ -c $(CAENCXXFLAGS) $(NSCLDAQCXXFLAGS)  \
+				 CompassTrigger.cpp -std=c++11
 	ar crs libCaenPha.a config.o DPPConfig.o CAENPha.o  CAENPhaParameters.o \
 		CAENPhaChannelParameters.o PHAEventSegment.o PHATrigger.o PHAMultiModuleSegment.o
 

@@ -39,7 +39,7 @@ bool        getBoolValue(pugi::xml_node node);
 std::string getStringContents(pugi::xml_node node);
 unsigned    getUnsignedContents(pugi::xml_node node);
 bool        getBoolContents(pugi::xml_node node);
-std::vector<pgi::xml_node> getAllByName(pugi::xml_node parent, const char* name);
+std::vector<pugi::xml_node> getAllByName(pugi::xml_node parent, const char* name);
 
 
 

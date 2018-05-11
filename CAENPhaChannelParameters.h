@@ -29,11 +29,13 @@
 #define CAENPHACHANNELPARAMETERS_H
 
 #include "pugixml.hpp"
+#include <functional>
 
 class CAENPhaChannelParameters
 {
 private:
-  pugi::xml_document&  m_xml;
+  static pugi::xml_document empty;
+  std::reference_wrapper<pugi::xml_document>  m_xml;
 
   // Parameters unpacked from the XML:
 
@@ -105,9 +107,10 @@ public:
 
 public:
   CAENPhaChannelParameters(pugi::xml_document& doc);
-  CAENPhaChannelParameters() {}          // Default constructor
+  CAENPhaChannelParameters() :  m_xml(empty) {}          // Default constructor
   CAENPhaChannelParameters(const CAENPhaChannelParameters& rhs);
   CAENPhaChannelParameters& operator=(const CAENPhaChannelParameters& rhs);
+
 
   void unpack();
   

@@ -220,7 +220,7 @@ getAllByName(pugi::xml_node parent, const char* name)
     }
     
     child = child.next_sibling();
-  } while (child != pugi::node_null);
+  } while (child.type() != pugi::node_null);
   
   return result;
 }
