@@ -32,7 +32,7 @@ CompassTrigger::addModule(CompassEventSegment* p)
  *   @retval false if all modules have no data.
  */
 bool
-CompassTrigger::operator()
+CompassTrigger::operator()()
 {
     for (int i =0; i < m_modules.size(); i++) {
         if (m_modules[i]->checkTrigger()) return true;

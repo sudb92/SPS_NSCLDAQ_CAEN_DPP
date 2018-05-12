@@ -19,7 +19,9 @@
 #include "CAENPhaChannelParameters.h"
 #include "DPPConfig.h"
 #include <CAENDigitizer.h>
-#include <CAENDigitizerTypes.h>
+#include <CAENDigitizerType.h>
+#include "CompassProject.h"
+
 
 #include <sstream>
 #include <iostream>
@@ -40,8 +42,8 @@
 CompassEventSegment::CompassEventSegment(
         std::string filename, int sourceId,
         CAEN_DGTZ_ConnectionType linkType, int linkNum, int node, int base
-) : m_filename(filename), m_board(nullptr), m_id(sourceId)
-    m_linkType(linkType), m_linkNum(linkNum), m_nNode(node), 
+	) : m_filename(filename), m_board(nullptr), m_id(sourceId),
+    m_linkType(linkType), m_nLinkNum(linkNum), m_nNode(node), 
     m_nBase(base) 
 {
     
@@ -75,7 +77,7 @@ CompassEventSegment::initialize()
         for (int i = 0; i < project.m_connections.size(); i++) {
             if (
                 (m_linkType == project.m_connections[i].s_linkType)  &&
-                (m_linkNum  == project.m_connections[i].s_linkNum)   &&
+                (m_nLinkNum  == project.m_connections[i].s_linkNum)   &&
                 (m_nNode    == project.m_connections[i].s_node)      &&
                 (m_nBase    == project.m_connections[i].s_base) 
             ) {
@@ -84,10 +86,10 @@ CompassEventSegment::initialize()
             }
         }
         if (!ourBoard) {                    // no matching board.
-            std::string msg = "No board in "
-            msg +=  m_filename
-            msg +=  " matches our connection parameters";
-            throw msg;   
+	  std::string msg = "No board in ";
+	  msg +=  m_filename;
+	  msg +=  " matches our connection parameters";
+	  throw msg;   
         }
         // Now we can setup the board.
         
@@ -116,6 +118,7 @@ CompassEventSegment::clear()
  *     Diable the digitizer.  Our code assumes we have a valid
  *     digitizer driver.
  */
+void
 CompassEventSegment::disable()
 {
     try {
@@ -123,7 +126,7 @@ CompassEventSegment::disable()
     }
     catch (std::pair<std::string, int> err) {
         std::cerr << "Board shutdown failed: "
-            << (err.first << " (" << err.second << ")\n";
+            << err.first << " (" << err.second << ")\n";
         throw;
     }
 }
@@ -204,8 +207,9 @@ CompassEventSegment::setupBoard(CAENPhaParameters& board)
 {
     delete m_board;                // Get rid of any prior board driver.
     m_board = nullptr;
-    m_board = new CANPha(
-        board, m_linkType, m_node, m_base,
+    m_board = new CAENPha(
+        board, m_linkType, m_nLinkNum,
+	m_nNode, m_nBase,
         board.s_startMode, true,                    // TODO get this from board
         board.startDelay
     );

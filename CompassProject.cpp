@@ -19,6 +19,7 @@
 #include "CAENPhaParameters.h"
 
 #include <stdexcept>
+#include <iostream>
 #include <stdio.h>
 /**
  * constructor
@@ -97,7 +98,7 @@ CompassProject::operator()()
  *             the CAENPhaChannelParameters* points to the processed parameters.
  */
 std::vector<CompassProject::ChannelInfo>
-CompassProject::parseBoardChannelConfigs(pugi::xml_node board)
+CompassProject::parseBoardChannelConfig(pugi::xml_node board)
 {
     // get the channels:
     
@@ -107,19 +108,20 @@ CompassProject::parseBoardChannelConfigs(pugi::xml_node board)
         for (int c = 0; c < channels.size(); c++) {
             // There must be an index tag and its value is the
             
-            pugi::xml_node chindex = getNodeByNameOrThrow(channels[i], "index");
+	  pugi::xml_node chindex = getNodeByNameOrThrow(channels[c], "index", "Missing <index> tag in <channel>");
             unsigned channelNumber = getUnsignedContents(chindex);
             
             // must have a <values> tag:
             
-            pugi::xml_node values = getNodeByNameOrThrow(channels[i], "values");
+            pugi::xml_node values = getNodeByNameOrThrow(channels[c], "values", "Missing <values> tag");
             CAENPhaChannelParameters* params =
-                new CAENPHaChannelParameters(m_channelDefaults);    // OK since we don't ask the doc to be processed.
+                new CAENPhaChannelParameters(m_channelDefaults);    // OK since we don't ask the doc to be processed.
             
             // Push back now so failure will clean up:
             
-            result.push_back(std::pair<channelNumber, params);
-            processChannelParams(vaules, params);
+            result.push_back(
+	        std::pair<unsigned, CAENPhaChannelParameters*>(channelNumber, params));
+            processChannelParams(values, params);
         }
         
         
@@ -204,79 +206,79 @@ CompassProject::processChannelParams(
 void
 CompassProject::processChannelEntry(pugi::xml_node entry, CAENPhaChannelParameters* param)
 {
-    pugi::xml_node key = getNodeByNameOrThrow(entry, "key");
+  pugi::xml_node keytag = getNodeByNameOrThrow(entry, "key", "Missing key tag in a channel <entry> ");
     // pugi::xml_node val = getNodeByNameOrThrow(entry, "value");
     
     
     // Meaning of value depends on the key so :
     
-    std::string key = getStringContents(key);
+    std::string key = getStringContents(keytag);
     if (key == "SRV_PARAM_CH_ENABLED") {
         bool enabled = getBoolValue(entry);
         param->enabled = enabled;
     } else if (key == "SRV_PARAM_CH_THRESHOLD ") {
-        params->treshold = getUnsignedValue(entry);
+        param->threshold = getUnsignedValue(entry);
     } else if (key == "SRV_PARAM_CH_TRAP_TRISE") {
-        params->trapRiseTime = getDoubleValue(entry);
+        param->trapRiseTime = getDoubleValue(entry);
     } else if (key == "SRV_PARAM_CH_ENERGYCUTENABLE") {
-        params->energySkim = getBoolValue(entry);    
+        param->energySkim = getBoolValue(entry);    
     } else if (key == "SRV_PARAM_CH_PRETRG" ) {
-        params->preTrigger = getDoubleValue(entry);
+        param->preTrigger = getDoubleValue(entry);
     } else if (key =="SRV_PARAM_CH_ENERGYLOWCUT") {
-        params->lld = getDoubleValue(value)        // << - need to convert.
+      param->lld = getDoubleValue(entry);        // << - need to convert.
     } else if (key == "SRV_PARAM_CH_TRAP_TFLAT") {
-        params->trapFlatTop = getDoubleValue(entry);
+        param->trapFlatTop = getDoubleValue(entry);
     } else if (key == "SRV_PARAM_CH_ENERGYHIGHCUT") {
-        params->uld = getDoubleValue(entry);       // << - need to convert.
+        param->uld = getDoubleValue(entry);       // << - need to convert.
     } else if (key == "SRV_PARAM_CH_POLARITY") {
-        params->polarity = (getValue(entry) == "POLARITY_NEGATIVE") ?
+        param->polarity = (getValue(entry) == "POLARITY_NEGATIVE") ?
             CAENPhaChannelParameters::negative :
             CAENPhaChannelParameters::positive;
             
     } else if (key == "SRV_PARAM_CH_TRG_HOLDOFF") {
-        params->triggerHoldoff = getDoubleValue(entry);
+        param->triggerHoldoff = getDoubleValue(entry);
     } else if (key == "SRV_PARAM_CH_TTF_SMOOTHING") {
-        params->rccr2smoothing = convertRccr2Smoothing(
+        param->rccr2smoothing = convertRccr2Smoothing(
             getValue(entry)
         );
     } else if (key == "SRV_PARAM_CH_PSDLOWCUT") {
-        params->psdLowCut = getDoubleValue(entry);
+        param->psdLowCut = getDoubleValue(entry);
     } else if (key == "SRV_PARAM_CH_PSDHIGHCUT") {
-        params->psdHighCut = getDoubleValue(entry);
+        param->psdHighCut = getDoubleValue(entry);
     } else if (key == "SRV_PARAM_CH_TRAP_POLEZERO") {
-        params->acPoleZero = getDoubleValue(entry);  // << - need to convert.
+        param->acPoleZero = getDoubleValue(entry);  // << - need to convert.
     } else if (key == "SRV_PARAM_CH_BLINE_NSMEAN") {
-        params->BLMean = convertBaslineMeanCode(
-            getValue(entry);    
+        param->BLMean = convertBaselineMeanCode(
+            getValue(entry)  
         );
     } else if (key == "SRV_PARAM_CH_PSDCUTENABLE") {
-        params->psdCutEnbale = getBoolValue(entry);
+        param->psdCutEnable = getBoolValue(entry);
     } else if (key == "SRV_PARAM_CH_TTF_DELAY") {
-        params->flattopDelay = getDoubleValue(entry);
+        param->flattopDelay = getDoubleValue(entry);
     } else if (key == "SRV_PARAM_CH_BLINE_DCOFFSET") {
-        params->dcOffset =
+        param->dcOffset =
             convertDCOffset(getDoubleValue(entry));  
     } else if (key == "SRV_PARAM_CH_TRAP_PEAKING") {
-      params->trapPeaking = getDoubleValue(entry);                                                // << - what is this?
+      param->trapPeaking = getDoubleValue(entry);                                                // << - what is this?
     } else if (key == "SW_PARAM_CH_TIMECUTENABLE") { // Compass Software param.
       
     } else if (key == "SRV_PARAM_CH_INDYN") {
                                                     // Input dynamic range.
-        params->range = getDynamicRange(getValue(entry));
+        param->range = getDynamicRange(getValue(entry));
     } else if (key == "SRV_PARAM_CH_PEAK_NS_MEAN") {
-        params->peakMean = convertPeakMeanCode(
-            getValue(entry);
-        )
+        param->peakMean = convertPeakMeanCode(
+	    getValue(entry)
+	);
     } else if (key == "SRV_PARAM_CH_TIMELOWCUT") {
                                                    // << can we suppor this?
     } else if (key == "SRV_PARAM_CH_TIMEHIGHCUT") {
                                                    // can we support this?
     } else if (key == "SRV_PARAM_CH_SATURATION_REJECTION_ENABLE") {
-        params->otReject = getBoolValue(entry);
+        param->otReject = getBoolValue(entry);
     } else if (key == "SRV_PARAM_CH_PUR_ENABLE") {
                                                    // Can we support pilelup reject?
     } else if (key =="SRV_PARAM_CH_PEAK_HOLDOFF") {
-        params->peakHoldoff = nsToSamples(getDoubleValue3(entry));
+        param->peakHoldoff = nsToSamples(getDoubleValue(entry));
     } else {
         std::cerr << "Unrecognized parameter keyword in compass config file: "
             << key << std::endl;
@@ -323,25 +325,25 @@ CompassProject::processBoardParameters(
    // <address> (optional, defaults to zero)
    
    pugi::xml_node addressNode = getNodeByName(entry, "address");
-   if (addressNode == pugi::null) {
+   if (addressNode.type() == pugi::node_null) {
       connection.s_base = 0;
    } else {
-      connection.s_base = getUnsignedContents(addresNode);
+      connection.s_base = getUnsignedContents(addressNode);
    }
     
     // Locate the parametrs It's an error for there not to be one:
     
     pugi::xml_node params = getNodeByNameOrThrow(
-        entry, entry, "parameters",
+        entry, "parameters",
         "Mandatory <parameters> tag missing for board"
     );
     // Now enumerate the <entry> tags:
     
-    std::vector<pugi_xml_node> paramEntries =  getAllByName(params, "entry");
+    std::vector<pugi::xml_node> paramEntries =  getAllByName(params, "entry");
     
     // Process each parameter entry:
     
-    for (int i =0; i < paramEntrys.size(); i++) {
+    for (int i =0; i < paramEntries.size(); i++) {
         processABoardParameter(paramEntries[i], board);
     }
 }
@@ -452,7 +454,7 @@ CompassProject::processBoardParameters(
 void
 CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& board)
 {
-    pugi_xml::node keyNode = getNodeByNameOrThrow(
+  pugi::xml_node keyNode = getNodeByNameOrThrow(
         param, "key", "Missing <key> tag in global parameters <entry>"
     );
     std::string key = getValue(keyNode);    // Name of parameter.
@@ -509,8 +511,8 @@ CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& 
                                         // Compass software parameter
     } else if (key == "SRV_PARAM_CH_BLINE_NSMEAN") {
                                         // Default samples in baseline mean.
-        unsigned defaultBlMean = getBaselineMean(getValue(param));
-        m_channelDefaults.BLMean = defaultBLMean;
+        unsigned defaultBlMean = convertBaselineMeanCode(getValue(param));
+        m_channelDefaults.BLMean = defaultBlMean;
     } else if (key == "SRV_PARAM_CH_TRAP_TFLAT") {
                                         // Default trapezoid flat top time.
         double defaultFlattopTime = getDoubleValue(param);
@@ -519,11 +521,11 @@ CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& 
                                         // Compass software parameter.
     } else if (key == "SRV_PARAM_START_MODE") {
                                         // Digitizer start mode.
-        board.s_startMode = getStartMode(getValue(param);
+      board.s_startMode = getStartMode(getValue(param));
                                          
     } else if (key == "SRV_PARAM_TIMEBOMBDOWNCOUNTER") {
                                         // Unused - timebomb counter(?)
-    } else (key == "SRV_PARAM_CH_ENABLED ") { 
+    } else if (key == "SRV_PARAM_CH_ENABLED") { 
                                         // Default channel enable.
         bool defaultEnabled = getBoolValue(param);
         m_channelDefaults.enabled = defaultEnabled;
@@ -531,7 +533,7 @@ CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& 
     } else if (key == "SRV_PARAM_CH_ENERGY_FINE_GAIN") {
                                         // Default fine energy gain.
         double defaultFineGain = getDoubleValue(param);
-        m_channelDefaults.digitalGain = defaultFileGain; // ??
+        m_channelDefaults.digitalGain = defaultFineGain; // ??
     } else if (key == "SW_PARAM_CH_SATURATION_REJECTION_ENABLE") {
                                         // Compass software parameter.
     } else if (key == "SW_PARAMETER_CH_ENERGYLOWCUT") {
@@ -549,7 +551,7 @@ CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& 
                                         // calibrate on start - ignored on unconditionally.
     } else if (key == "SRV_PARAM_CH_PEAK_NSMEAN") {
         unsigned defaultNsPeakMean = convertPeakMeanCode(getValue(param));
-        m_channelDefaults.peakMain = defaultNsPeakMean;
+        m_channelDefaults.peakMean = defaultNsPeakMean;
     } else if (key == "SRV_PARAM_CH_TRGOUT") {
                                         // Trigger output for hw channels (ignored).
         
@@ -565,7 +567,7 @@ CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& 
                                         // Compass time sw param value.
     } else if (key == "SRV_PARAM_CH_TRAP_POLEZERO") {
         double defaultPolezeroNs = getDoubleValue(param);
-        m_channelDefaults.acPoleZerot = defaultPoleZeroNs;
+        m_channelDefaults.acPoleZero = defaultPolezeroNs;
     } else if (key == "SW_PARAMETER_X_BINCOUNT") {
                                         // Compass sw parameter.
     } else if (key == "SW_PARAMETER_CH_ENERGYCUTENABLE") {
@@ -583,20 +585,20 @@ CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& 
                                         // External trigger -> trgout (ignored for now)
     } else if (key == "SRV_PARAM_RECLEN") { 
                                     // Length of recorded waveform.
-        board->s_window = nsToSamples(getDoubleValue(param));
+        board.recordLength = nsToSamples(getDoubleValue(param));
         
     } else if (key == "SRV_PARAM_START_DELAY") {
-      startDelay = nsToSamples(getDoubleValue(param));   // start delay (synch).
+      unsigned startDelay = nsToSamples(getDoubleValue(param));   // start delay (synch).
         
     } else if (key == "SRV_PARAM_TRG_EXT_ENABLE" ) {
         bool extTriggerEnable = getBoolValue(param);   // Compute trigger Control
     } else if (key == "SW_PARAMETER_CH_PSDLOWCUT") {
                                     // Compass software parameter.
     } else if (key == "SRV_PARAM_WAVEFORMS ") {
-        boarfd->waveforms = getBoolValue(param);
+        board.waveforms = getBoolValue(param);
     } else if (key == "SRV_PARAM_CH_PEAK_HOLDOFF") {
         unsigned defaultPeakHoldoff = nsToSamples(getDoubleValue(param));
-        m_channelDefaults = defaultPeakHoldoff;
+        m_channelDefaults.peakHoldoff = defaultPeakHoldoff;
     } else if (key == "SW_PARAMETER_CH_LABEL") {
                                         // Compass software parameter name.
     } else if (key == "SRV_PARAM_CH_TRAP_TRISE") {
@@ -615,10 +617,10 @@ CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& 
     } else if (key == "SRV_PARAM_CH_OUT_PROPAGATE") {
                                 // ?? ignored for now.
     } else if (key == "SRV_PARAM_IOLEVEL") {
-        board->gpioLogic = convertIOLevel(getValue(param));
+      // Unused - hard coded to NIM now IIR.
     } else if (key == "SW_PARAMETER_CH_DC_OFFSET_CALIBRATION_P1") {
                                 // Compass param for calibrating DC offsets.
-    } else if (key = "SRV_PARAM_TRGVAL_PROPAGATE") {
+    } else if (key == "SRV_PARAM_TRGVAL_PROPAGATE") {
         bool propagateTrigger  = getBoolValue(param);   // Triggers -> TRGO
     } else if (key == "SW_PARAMETER_CH_DC_OFFSET_CALIBRATION_P0") {
                                 // Compass param for calibrating DC Offsets.
@@ -626,7 +628,7 @@ CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& 
                                 // COmpass software time cut parameter.
     } else if (key == "SRV_PARAM_CH_TTF_SMOOTHING") {
         int defaultRCCR2Smoothing = convertRccr2Smoothing(getValue(param));
-        m_channelDefatuls.rccr2smoothing = defaultRCCR2Smoothing;
+        m_channelDefaults.rccr2smoothing = defaultRCCR2Smoothing;
         
     } else if (key == "SW_PARAMETER_TIME_DISTRIBUTION_CH_T0") {
                                 // COmpass time distrib calibration param 
@@ -643,7 +645,7 @@ CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& 
         m_channelDefaults.trapPeaking = defaultTrapPeaking;
         
     } else if (key == "SRV_PARAM_CH_PRETRG") {
-        unsigned defaultPretrig = nsTOSamples(getDoubleValue(param));
+        unsigned defaultPretrig = nsToSamples(getDoubleValue(param));
         m_channelDefaults.preTrigger = defaultPretrig;
     } else if (key == "SW_PARAMETER_CH_ENERGYHIGHCUT" ) {
                                     // Compass software parameter for e cut.
@@ -686,7 +688,7 @@ unsigned
 CompassProject::convertBaselineMeanCode(const std::string& code)
 {
     unsigned result(0);
-    sscanb(code.c_str(), "BLINE_NSMEAN_%d", &result);
+    sscanf(code.c_str(), "BLINE_NSMEAN_%d", &result);
     return result;
 }
 /**
@@ -753,20 +755,6 @@ CompassProject::nsToSamples(double ns)
     return static_cast<unsigned>(ns/4.0);
 }
 /**
- *  convertIOLevel
- *      Return the I/O level code appropriate to the parameter.
- *
- * @param value - one of FPIOTYPE_NIM or FPIOTYPE_TTL
- * @return 0 for NIM 1 for TTL.
- */
-unsigned
-CompassProject::convertIOLevel(std::string value)
-{
-    if (value == "FPIOTYPE_NIM") return 0;
-    if (value == "FPIOTYPE_TTL") return 1;
-    throw std::string("Invalid FPIO level code.");
-}
-/**
  *  stringToLinkeType
  *     Converts a string to a connection type enum value:
  *
@@ -787,4 +775,25 @@ CompassProject::stringToLinkType(const std::string& strType)
       msg  += strType;
       throw(msg);
    }
+}
+/**
+ * getStartMode
+ *   Given a string encoding of the start mode, returnn the corresponding
+ *   acquisition mode value.
+ *
+ * @param modeString - stringified mode.
+ * @return CAEN_DGTZ_AcqMode_t
+ */
+CAEN_DGTZ_AcqMode_t
+CompassProject::getStartMode(std::string modeString)
+{
+  if (modeString == "START_MODE_SW" ) {
+    return CAEN_DGTZ_SW_CONTROLLED;
+  } else if (modeString == "START_MODE_S_IN") {
+    return CAEN_DGTZ_S_IN_CONTROLLED;
+  } else if (modeString == "START_MODE_FIRST_TRG") {
+    return CAEN_DGTZ_FIRST_TRG_CONTROLLED;
+  } else {
+    throw std::string("Invalid SRV_PARAM_START_MODE value");
+  }
 }

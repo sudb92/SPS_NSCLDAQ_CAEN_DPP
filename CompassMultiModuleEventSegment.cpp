@@ -19,7 +19,7 @@
 /**
  *   Constructor -- just initialize m_nextRead (round robbin member).
  */
-CompassEventSegent::CompassEventSegment() :
+CompassMultiModuleEventSegment::CompassMultiModuleEventSegment() :
     m_nextRead(0)
 {}
 
@@ -29,7 +29,7 @@ CompassEventSegent::CompassEventSegment() :
  *  @param p  - pointer to the module to add to the collection.
  */
 void
-CompassEventSegment::addModule(CompassEventSegment* p)
+CompassMultiModuleEventSegment::addModule(CompassEventSegment* p)
 {
     m_modules.push_back(p);
 }
@@ -38,7 +38,7 @@ CompassEventSegment::addModule(CompassEventSegment* p)
  *    Initialize all modules.
  */
 void
-CompassEventSegment::initialize()
+CompassMultiModuleEventSegment::initialize()
 {
     for (int i =0; i < m_modules.size(); i++) {
         m_modules[i]->initialize();
@@ -49,7 +49,7 @@ CompassEventSegment::initialize()
  *     Invoke each module's clear method:
  */
 void
-CompassEventSegment::clear()
+CompassMultiModuleEventSegment::clear()
 {
     for (int i  = 0; i < m_modules.size(); i++) {
         m_modules[i]->clear();
@@ -60,10 +60,10 @@ CompassEventSegment::clear()
  *   Disable all modules
  */
 void
-CompassEventSegment::disable()
+CompassMultiModuleEventSegment::disable()
 {
     for (int i =0; i < m_modules.size(); i++) {
-        m_modles[i].disable();
+        m_modules[i]->disable();
     }
 }
 /**
@@ -77,11 +77,11 @@ CompassEventSegment::disable()
  * @return size_t  - Number of words read - could be zero.
  */
 size_t
-CompassEventSegment::read(void* pBuffer, size_t maxwords)
+CompassMultiModuleEventSegment::read(void* pBuffer, size_t maxwords)
 {
     size_t nM = m_modules.size();
     for (int i =0; i < nM; i++) {
-        size_t nRead = m_modules[m_nextREad]->read(pBuffer, maxwords);
+        size_t nRead = m_modules[m_nextRead]->read(pBuffer, maxwords);
         m_nextRead = (m_nextRead + 1) % nM;
         if (nRead) return nRead;
     }

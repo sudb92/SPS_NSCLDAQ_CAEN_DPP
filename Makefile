@@ -55,10 +55,10 @@ libCaenPha.a:  CAENPhaParameters.h CAENPhaParameters.cpp  CAENPhaChannelParamete
 				 PHAMultiModuleSegment.cpp -std=c++11
 	g++ -c $(CAENCXXFLAGS) $(NSCLDAQCXXFLAGS)  \
 				 CompassProject.cpp -std=c++11
-		g++ -c $(CAENCXXFLAGS) $(NSCLDAQCXXFLAGS)  \
-				 CompassEventSegment.cpp.cpp -std=c++11
+	g++ -c $(CAENCXXFLAGS) $(NSCLDAQCXXFLAGS) $(INIPARSERCXXFLAGS)  \
+				 CompassEventSegment.cpp -std=c++11
 	g++ -c $(CAENCXXFLAGS) $(NSCLDAQCXXFLAGS)  \
-				 CompassMultiModuleEvebtSegment.cpp -std=c++11
+				 CompassMultiModuleEventSegment.cpp -std=c++11
 	g++ -c $(CAENCXXFLAGS) $(NSCLDAQCXXFLAGS)  \
 				 CompassTrigger.cpp -std=c++11
 	ar crs libCaenPha.a config.o DPPConfig.o CAENPha.o  CAENPhaParameters.o \

@@ -1,4 +1,4 @@
-z/**
+/**
 #******************************************************************************
 #
 # Via Vetraia, 11 - 55049 - Viareggio ITALY
@@ -33,10 +33,13 @@ private:
     unsigned                      m_nextRead;
 
 public:
+  CompassMultiModuleEventSegment();
     virtual void initialize();
     virtual void clear();
     virtual void disable();
     virtual size_t read(void* pBuffer, size_t maxwords);
+public:
+  void addModule(CompassEventSegment* p);
 };
 
 

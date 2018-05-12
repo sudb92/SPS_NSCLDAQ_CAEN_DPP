@@ -20,6 +20,7 @@
 #include <CAENDigitizerType.h>
 
 class CAENPha;
+class CAENPhaParameters;
 
 /**
  * @class CompassEventSegment
@@ -46,13 +47,13 @@ public:
         std::string filename, int sourceId,
         CAEN_DGTZ_ConnectionType linkType, int linkNum, int node, int base
     );
-    virtual ~CompassEventSegment;
+    virtual ~CompassEventSegment();
     
     
     // A great deal of this could possibly be factored into a common base class.
     
     virtual void initialize();
-    vrital void clear();
+    virtual void clear();
     virtual void disable();
     virtual size_t read(void* pBuffer, size_t maxwords);
     
@@ -74,7 +75,7 @@ private:
     void*  putDppData(void* pDest, const CAEN_DGTZ_DPP_PHA_Event_t& dpp);
     void*  putWfData(void* pDest, const CAEN_DGTZ_DPP_PHA_Waveforms_t& wf);
     
-}
+};
 
 
 #endif
