@@ -16,6 +16,11 @@ CAENPhaChannelParameters::CAENPhaChannelParameters(pugi::xml_document& doc) :
   psdCutEnable(false)      // MCSA2 has no PDS low/high cuts.
   {}
 
+CAENPhaChannelParameters::CAENPhaChannelParameters(const CAENPhaChannelParameters& rhs) : m_xml(rhs.m_xml)
+{
+  *this = rhs;
+}
+
 /**
  *  assignment
  *   @param rhs - the object we're being assigned from

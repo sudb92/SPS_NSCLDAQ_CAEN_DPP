@@ -62,7 +62,8 @@ libCaenPha.a:  CAENPhaParameters.h CAENPhaParameters.cpp  CAENPhaChannelParamete
 	g++ -c $(CAENCXXFLAGS) $(NSCLDAQCXXFLAGS)  \
 				 CompassTrigger.cpp -std=c++11
 	ar crs libCaenPha.a config.o DPPConfig.o CAENPha.o  CAENPhaParameters.o \
-		CAENPhaChannelParameters.o PHAEventSegment.o PHATrigger.o PHAMultiModuleSegment.o
+		CAENPhaChannelParameters.o PHAEventSegment.o PHATrigger.o PHAMultiModuleSegment.o \
+		CompassProject.o CompassEventSegment.o CompassMultiModuleEventSegment.o CompassTrigger.o
 
 
 clean:

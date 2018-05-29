@@ -34,7 +34,17 @@ CompassProject::CompassProject(const char*name)
    }
    
 }
-
+/**
+ destructor
+*/
+CompassProject::~CompassProject()
+{
+  m_connections.clear();
+  for(int i = 0; i < m_boards.size(); i++) {
+    delete m_boards[i];
+  }
+  m_boards.clear();
+}
 
 /**
  * operator()
@@ -280,8 +290,8 @@ CompassProject::processChannelEntry(pugi::xml_node entry, CAENPhaChannelParamete
     } else if (key =="SRV_PARAM_CH_PEAK_HOLDOFF") {
         param->peakHoldoff = nsToSamples(getDoubleValue(entry));
     } else {
-        std::cerr << "Unrecognized parameter keyword in compass config file: "
-            << key << std::endl;
+        std::cerr << "Unrecognized channel  parameter keyword in compass config file: "
+		  << key << "  ignored\n";
     }
 
 }
@@ -294,6 +304,8 @@ CompassProject::processChannelEntry(pugi::xml_node entry, CAENPhaChannelParamete
  *   They also may/do have <descriptor> tags which see like they are used
  *   by the Compass UI to figure out how to display/prompt for those params.
  *
+ *   Each key, for reasons unclear to me has a value tag that's nested inside another
+ *   <value> tag.
  * @param[in] pugi::xml_node - A <board> node.
  * @param[out] board - a reference to the board whose parameters we're figuring out.
  * @param[out] connection - how the board connects to the computer
@@ -329,6 +341,13 @@ CompassProject::processBoardParameters(
       connection.s_base = 0;
    } else {
       connection.s_base = getUnsignedContents(addressNode);
+   }
+   // Could be a connetNode -- if not, initialize that to zero.
+
+   connection.s_node = 0;
+   pugi::xml_node nodeNode = getNodeByName(entry, "conetNode");
+   if (nodeNode.type() != pugi::node_null) {
+     connection.s_node = getUnsignedContents(nodeNode);
    }
     
     // Locate the parametrs It's an error for there not to be one:
@@ -457,8 +476,8 @@ CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& 
   pugi::xml_node keyNode = getNodeByNameOrThrow(
         param, "key", "Missing <key> tag in global parameters <entry>"
     );
-    std::string key = getValue(keyNode);    // Name of parameter.
-    
+    std::string key = getStringContents(keyNode);    // Name of parameter.
+    param = getNodeByNameOrThrow(param, "value", "Missing outer <value> tag in board parameter");    // Value is nested in value.sheesh.
     
     // Figure out how to decode each parameter:
     
@@ -490,8 +509,10 @@ CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& 
         *                                   OUT_PROPAGATION_BUSY - output the digitizer busy.
         *                                   OUT_PROPAGATION_PLL_LOCK - State of the PLL Lock.
         *                                   OUT_PROPAGATION_VPROBE - Output a virtual probe.
-        *                                   OUT_PROPAGATION_SYNCIN - Output the sync in pulse.
-        *   SRV_PARAM_TRG_SW_ENABLE   - Boolean that is true if software triggers are allowed. */
+        *                                   OUT_PROPAGATION_SYNCIN - Output the sync in pulse. */
+    } else if (key == "SRV_PARAM_TRG_SW_ENABLE") {
+      bool val = getBoolValue(param);               // For now ignored.
+    
     } else if (key == "SRV_PARAM_CH_TTF_DELAY") {
       m_channelDefaults.flattopDelay = static_cast<unsigned>(
          getDoubleValue(param)
@@ -585,7 +606,7 @@ CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& 
                                         // External trigger -> trgout (ignored for now)
     } else if (key == "SRV_PARAM_RECLEN") { 
                                     // Length of recorded waveform.
-        board.recordLength = nsToSamples(getDoubleValue(param));
+      board.recordLength = nsToSamples(getDoubleValue(param));
         
     } else if (key == "SRV_PARAM_START_DELAY") {
       unsigned startDelay = nsToSamples(getDoubleValue(param));   // start delay (synch).
@@ -594,7 +615,7 @@ CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& 
         bool extTriggerEnable = getBoolValue(param);   // Compute trigger Control
     } else if (key == "SW_PARAMETER_CH_PSDLOWCUT") {
                                     // Compass software parameter.
-    } else if (key == "SRV_PARAM_WAVEFORMS ") {
+    } else if (key == "SRV_PARAM_WAVEFORMS") {
         board.waveforms = getBoolValue(param);
     } else if (key == "SRV_PARAM_CH_PEAK_HOLDOFF") {
         unsigned defaultPeakHoldoff = nsToSamples(getDoubleValue(param));
@@ -708,8 +729,8 @@ CompassProject::convertPeakMeanCode(const std::string& code)
 }
 /**
  * convertDCOffset
- *    Convert a DC offset into the register value.  Register values are
- *    0-65535
+ *    Convert a DC offset into the value used by MCA2 that's
+ *    a range 0-16383
  *
  *  @param pct - percent of full scale (signed)?
  *  @param unsigned - converted value.
@@ -719,22 +740,24 @@ CompassProject::convertDCOffset(double pct)
 {
     // Assuming this is a signed DC offset percentage:
     
-    return static_cast<unsigned>(32767 + static_cast<int>(3767.0*pct));
+    return static_cast<unsigned>(8192.0 + static_cast<int>(8192.0*pct/100.0));
 }
 /**
  * getDynamicRange
- *     Return a dynamic range selector value for the input dynamic range register
- *     given the keyword string.
+ *     Return a dynamic range selector value for the input dynamic range
+ *    value for CAENPha::setupChannelParameters.
  *
  * @param keyword - dynamic range keyword, e.g. INDYN_2_0_VPP
- * @return unsigned. - value suitable for an input dynamic range register.
+ * @return unsigned.
+ * @retval 10 - 2 vPP
+ * @retval  9 - 0.5 vPP
  * 
  */
 unsigned
 CompassProject::getDynamicRange(std::string keyword)
 {
-    if (keyword == "INDYN_2_0_VPP") return 0;
-    if (keyword == "INDYN_0_5_VPP") return 1;
+    if (keyword == "INDYN_2_0_VPP") return 10;
+    if (keyword == "INDYN_0_5_VPP") return 9;
     
     // Illegal value
     

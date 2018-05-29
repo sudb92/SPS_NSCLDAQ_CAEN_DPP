@@ -117,6 +117,7 @@ CAENPha::setup()
   
   // Set individual trigger, mb1, propagate triggers, TRG validation(?)
 
+  CAEN_DGTZ_WriteRegister(m_handle, 0x8008, 0xffffffff);    // Clear all bits.
   status = CAEN_DGTZ_WriteRegister(m_handle, 0x8000, 0x010000114);
   if (status != CAEN_DGTZ_Success) {
     throw std::pair<std::string, int>("Write board config register failed", status);

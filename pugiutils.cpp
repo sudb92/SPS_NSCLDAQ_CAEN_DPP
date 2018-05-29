@@ -141,7 +141,7 @@ getDoubleValue(pugi::xml_node node)
  */
 bool
 getBoolValue(pugi::xml_node node)
-{
+{ 
   std::string strValue = getValue(node);
   return ! ((strValue == "False") || (strValue == "false"));  // Compass uses lower cases
 }

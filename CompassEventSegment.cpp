@@ -213,6 +213,7 @@ CompassEventSegment::setupBoard(CAENPhaParameters& board)
         board.s_startMode, true,                    // TODO get this from board
         board.startDelay
     );
+    m_board->setup();
     
 }
 

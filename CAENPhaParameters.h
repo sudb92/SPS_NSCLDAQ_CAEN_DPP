@@ -118,7 +118,7 @@ public:
   
 public:
   CAENPhaParameters(pugi::xml_document& m_dom, std::vector<std::pair<unsigned, pugi::xml_document*> >& channelDoms);
-  CAENPhaParameters() : m_dom(empty), m_channelDoms(emptyDoms) {}                // Default constructor
+  CAENPhaParameters() : m_dom(empty), m_channelDoms(emptyDoms), acqMode(1) {}                // Default constructor
   CAENPhaParameters(const CAENPhaParameters& rhs);
   ~CAENPhaParameters();
   CAENPhaParameters& operator=(const CAENPhaParameters& rhs);
