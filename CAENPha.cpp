@@ -30,6 +30,7 @@
 #include <iostream>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 /**
  * Constructor
@@ -148,6 +149,9 @@ CAENPha::setup()
   }
  
   setTriggerAndSyncMode();
+  
+  sleep(1);
+
   setPerChannelParameters();
   
   // Use a pretty generic buffer organization for now:

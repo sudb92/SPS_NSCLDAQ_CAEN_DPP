@@ -121,7 +121,7 @@
                 </entry>
                 <entry>
                     <key>SRV_PARAM_CH_TRAP_PEAKING</key>
-                    <value xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">75.8</value>
+                    <value xsi:type="xs:double" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">0.0</value>
                 </entry>
                 <entry>
                     <key>SW_PARAMETER_CH_PSDCUTENABLE</key>

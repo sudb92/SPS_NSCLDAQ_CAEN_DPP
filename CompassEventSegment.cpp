@@ -25,6 +25,7 @@
 
 #include <sstream>
 #include <iostream>
+#include <stdlib.h>
 
 /**
  * constructor
