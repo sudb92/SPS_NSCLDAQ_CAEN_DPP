@@ -234,16 +234,15 @@ CompassProject::processChannelEntry(pugi::xml_node entry, CAENPhaChannelParamete
         param->threshold = getDoubleValue(entry);
     } else if (key == "SRV_PARAM_CH_TRAP_TRISE") {
         param->trapRiseTime = getDoubleValue(entry)/1000.0; // usec expected
-    } else if (key == "SRV_PARAM_CH_ENERGYCUTENABLE") {
+    } else if (key == "SW_PARAM_CH_ENERGYCUTENABLE") {
         param->energySkim = getBoolValue(entry);    
     } else if (key == "SRV_PARAM_CH_PRETRG" ) {
         param->preTrigger = getDoubleValue(entry);
-    } else if (key =="SRV_PARAM_CH_ENERGYLOWCUT") {
-      param->lld = getDoubleValue(entry);        // << - need to convert.
+    } else if (key =="SW_PARAM_CH_ENERGYLOWCUT") {
+
     } else if (key == "SRV_PARAM_CH_TRAP_TFLAT") {
         param->trapFlatTop = getDoubleValue(entry)/1000.0; // Expecting usec
-    } else if (key == "SRV_PARAM_CH_ENERGYHIGHCUT") {
-        param->uld = getDoubleValue(entry);       // << - need to convert.
+    } else if (key == "SW_PARAM_CH_ENERGYHIGHCUT") {
     } else if (key == "SRV_PARAM_CH_POLARITY") {
         param->polarity = (getValue(entry) == "POLARITY_NEGATIVE") ?
             CAENPhaChannelParameters::negative :
@@ -296,6 +295,10 @@ CompassProject::processChannelEntry(pugi::xml_node entry, CAENPhaChannelParamete
     } else if (key == "SRV_PARAM_CH_ENERGY_FINE_GAIN") {
                                         // Default fine energy gain.
       param->digitalGain = gainToCode(getDoubleValue(entry));
+
+    } else if (key == "SRV_PARAM_CH_PEAK_NSMEAN") {
+        param->peakMean = convertPeakMeanCode(getValue(entry));
+
     } else {
         std::cerr << "Unrecognized channel  parameter keyword in compass config file: "
 		  << key << "  ignored\n";
@@ -324,6 +327,21 @@ CompassProject::processBoardParameters(
 )
 {
   m_channelDefaults.baselineHoldoff = 2.0;       // This is obsolete since 11/22/2016
+  m_channelDefaults.decimation      =   0;       // No compass config?
+  m_channelDefaults.trapGain        =   3;       // ENERGY_COARSE_GAIN defined but not set.
+  m_channelDefaults.triggerValidationWidth = 2;	// Again I don't see a COMPASS Parameter for this.
+  m_channelDefaults.coincidenceWindow = false;
+  m_channelDefaults.trResetEnabled    = false;
+  m_channelDefaults.trGain            = 0;
+  m_channelDefaults.trThreshold      = 30;
+  m_channelDefaults.trHoldoff        = 1;
+  m_channelDefaults.energySkim       = false;
+  m_channelDefaults.lld = 0;
+  m_channelDefaults.uld = 0;
+  m_channelDefaults.baselineClip     = false;
+  m_channelDefaults.fastTriggerCorrection = false;
+  m_channelDefaults.baselineAdjust = 0;
+
     // Load the connection parameters into connection.  Note that
     // if there's no base address, we load a zero...could be USB or CONET
     // connection -- only for VME adaptors does base address matter
@@ -711,14 +729,19 @@ CompassProject::convertRccr2Smoothing(const std::string& code)
  *
  *  @param code - String of the fomr BLINE_NSMEAN_nn
  *  @return unsigned the nn of the code.
- *  @note at present it's assume the code is legitimate.
  */
 unsigned
 CompassProject::convertBaselineMeanCode(const std::string& code)
 {
-    unsigned result(0);
-    sscanf(code.c_str(), "BLINE_NSMEAN_%d", &result);
-    return result;
+  if (code == "BLINE_NSMEAN_FIXED") return 0;
+  if (code == "BLINE_NSMEAN_16")    return 1;
+  if (code == "BLINE_NSMEAN_64")    return 2;
+  if (code == "BLINE_NSMEAN_256")   return 3;
+  if (code == "BLINE_NSMEAN_1024")  return 4;
+  if (code == "BLINE_NSMEAN_4096")  return 5;
+  if (code == "BLINE_NSMENA_16384") return 6;
+
+  throw std::string("Invalie baseline mean code");
 }
 /**
  * convertPeakMeanCode
@@ -731,9 +754,12 @@ CompassProject::convertBaselineMeanCode(const std::string& code)
 unsigned
 CompassProject::convertPeakMeanCode(const std::string& code)
 {
-    unsigned result(0);
-    sscanf(code.c_str(), "PEAK_NSMEAN_%d", &result);
-    return result;
+  if (code == "PEAK_NSMEAN_1") return 0;
+  if (code == "PEAK_NSMEAN_4") return 1;
+  if (code == "PEAK_NSMEAN_16") return 2;
+  if (code == "PEAK_NSMEAN_64") return 3;
+
+  throw std::string("Invalide code for SRV_PARAM_CH_PEAK_NSMEAN");
 }
 /**
  * convertDCOffset
