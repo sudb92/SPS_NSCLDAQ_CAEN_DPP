@@ -236,7 +236,7 @@ CompassProject::processChannelEntry(pugi::xml_node entry, CAENPhaChannelParamete
     if (key == "SRV_PARAM_CH_ENABLED") {
         bool enabled = getBoolValue(entry);
         param->enabled = enabled;
-    } else if (key == "SRV_PARAM_CH_THRESHOLD ") {
+    } else if (key == "SRV_PARAM_CH_THRESHOLD") {
         param->threshold = getDoubleValue(entry);
     } else if (key == "SRV_PARAM_CH_TRAP_TRISE") {
         param->trapRiseTime = getDoubleValue(entry)/1000.0; // usec expected
@@ -304,7 +304,12 @@ CompassProject::processChannelEntry(pugi::xml_node entry, CAENPhaChannelParamete
 
     } else if (key == "SRV_PARAM_CH_PEAK_NSMEAN") {
         param->peakMean = convertPeakMeanCode(getValue(entry));
-
+      // Silently ignored parameters:
+      
+    } else if (key == "SRV_PARAM_COINC_MODE") {
+    } else if (key == "SRV_PARAM_COINC_TRGOUT") {
+    } else if (key == "SRV_PARAM_ACQRUNNING") {
+    } else if (key == "SW_PARAMETER_CH_LABEL"){
     } else {
         std::cerr << "Unrecognized channel  parameter keyword in compass config file: "
 		  << key << "  ignored\n";
@@ -705,6 +710,10 @@ CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& 
                                     // Compass software parameter for e cut.
     } else if (key == "SRV_PARAM_TRG_SW_OUT_PROPAGATE") {
         bool propagateSwTrigger = getBoolValue(param);   // show sw triggers at TRGO
+    } else if (key == "SRV_PARAM_COINC_MODE") {
+    } else if (key == "SRV_PARAM_COINC_TRGOUT") {
+    } else if (key == "SRV_PARAM_ACQRUNNING") {
+    } else if (key == "SW_PARAMETER_CH_LABEL"){
     } else {
         std::cerr << "Unrecognized key tag: " << key << " ignored in board/default param processing";
     }
