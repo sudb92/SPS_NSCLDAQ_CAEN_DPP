@@ -31,6 +31,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <math.h>
 
 /**
  * Constructor
@@ -308,6 +309,7 @@ CAENPha::Read()
 /**
  * setChannelMask
  *   Compute the channel mask and set it:
+ *   Modify only if the enabled flag is true (for compass).
  */
 
 int
@@ -315,7 +317,9 @@ CAENPha::setChannelMask()
 {
   int enableMask = 0;
   for (int i =0; i < m_configuration.m_channelParameters.size(); i++) {
-    enableMask |= (1 << m_configuration.m_channelParameters[i].first);
+    if (m_configuration.m_channelParameters[i].second->enabled)  {
+      enableMask |= (1 << m_configuration.m_channelParameters[i].first);
+    }
   }
   int status = CAEN_DGTZ_SetChannelEnableMask(m_handle, enableMask);
   if (status != CAEN_DGTZ_Success) {
@@ -370,7 +374,7 @@ CAENPha::setTriggerAndSyncMode()
 
   switch (m_configuration.triggerSource) {
   case CAENPhaParameters::internal:
-    status = CAEN_DGTZ_WriteRegister(m_handle, CAEN_DGTZ_TRIGGER_SRC_ENABLE_ADD, 0x80000000);
+    status = CAEN_DGTZ_WriteRegister(m_handle, CAEN_DGTZ_TRIGGER_SRC_ENABLE_ADD, 0xffff);
     if (status != CAEN_DGTZ_Success) {
       throw std::pair<std::string, int>("Unable to enable internal trigger source", status);
     }
@@ -583,6 +587,7 @@ CAENPha::setPerChannelParameters()
     dppParams.eskimlld[ch]   = params.lld;
     dppParams.eskimuld[ch]   = params.uld;
     dppParams.trapbsl[ch]    = params.baselineAdjust;
+    dppParams.decimation[ch]  =  0;
 
     // NewPHA parameters
 
@@ -597,12 +602,20 @@ CAENPha::setPerChannelParameters()
     } else {
       throw std::pair<std::string, int>("Input range value not compatible with supported digitizers", params.range);
     }
-    uint32_t rangeAddr = 0x1028 | (i << 8);
+    uint32_t rangeAddr = 0x1028 | (ch << 8);
     status = CAEN_DGTZ_WriteRegister(m_handle, rangeAddr, rangeReg);
     if (status != CAEN_DGTZ_Success) {
       throw std::pair<std::string, int>("Failed to write range register", status);
     }
-  
+    status = CAEN_DGTZ_WriteRegister(m_handle, 0x10a0 + (ch << 8), 0);
+    if (status != CAEN_DGTZ_Success) {
+      throw std::pair<std::string, int>("Failed to write DPP control 2 register", status);
+    }
+    int fgRegisterValue = fineGainRegister(params.fineGain, dppParams.k[ch], dppParams.M[ch]);
+    status = CAEN_DGTZ_WriteRegister(m_handle, 0x104c | (ch << 8), fgRegisterValue);
+    if (status != CAEN_DGTZ_Success) {
+      throw std::pair<std::string, int>("Failed to write fine gain register", status);
+    }
   }
   status = CAEN_DGTZ_SetDPPParameters(m_handle, m_enableMask, &dppParams);
   if (status != CAEN_DGTZ_Success) {
@@ -749,4 +762,24 @@ CAENPha::findEarliest()
     throw std::logic_error("CAENPha::findEarliest - no channels with data !!");
   }
   return earliest;
+}
+/**
+ * Compute the fine gain register given:
+ *
+ * @param gain - the desired gain.
+ * @param k    - The trapezoid rise time.
+ * @param m    - The Decay time.
+ *
+ * See the FineGain register documentation in the CAEN document
+ *   UM5678_725_730_DPP_PHA_Registers  (I'm using rev 1).
+ */
+uint16_t
+CAENPha::fineGainRegister(double gain, int k, int m)
+{
+  // Figure out shf it's the integerized? rounded? log2(k*m)
+  // I think that digitzer library effectively uses integerized.
+  
+  int shf = log(double(k*m))/log(2.0);      // identity: logn(x) = log(x)/log(n)
+  double result = 65535.0 * gain * (1 << shf)/double(k*m);
+  return uint16_t(shf);
 }

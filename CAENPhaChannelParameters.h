@@ -67,7 +67,7 @@ public:
   unsigned otReject;
   unsigned peakMean;
   double   baselineHoldoff;
-  unsigned peakHoldoff;
+  double   peakHoldoff;
   double   trapPeaking;
   
   // <Trigger> Parameters:
@@ -97,6 +97,7 @@ public:
   unsigned   baselineAdjust;
   double     acPoleZero;
   Coupling   inputCoupling;
+  double     fineGain;
   
   
   // New COMPASS parameters.

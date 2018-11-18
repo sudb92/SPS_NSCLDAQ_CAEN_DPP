@@ -16,7 +16,9 @@ CAENPhaChannelParameters::CAENPhaChannelParameters(pugi::xml_document& doc) :
   psdCutEnable(false)      // MCSA2 has no PDS low/high cuts.
   {}
 
-CAENPhaChannelParameters::CAENPhaChannelParameters(const CAENPhaChannelParameters& rhs) : m_xml(rhs.m_xml)
+CAENPhaChannelParameters::CAENPhaChannelParameters(const CAENPhaChannelParameters& rhs) :
+  m_xml(rhs.m_xml),
+  fineGain(1)
 {
   *this = rhs;
 }
@@ -70,6 +72,7 @@ CAENPhaChannelParameters::operator=(const CAENPhaChannelParameters& rhs)
     psdCutEnable = rhs.psdCutEnable;
     psdLowCut    = rhs.psdLowCut;
     psdHighCut   = rhs.psdHighCut;
+    fineGain     = rhs.fineGain;
   }
   return *this;
 }

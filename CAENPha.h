@@ -93,5 +93,6 @@ private:
   bool dataBuffered();
   void fillBuffers();
   int  findEarliest();
+  uint16_t fineGainRegister(double value, int k, int m);
 };
 #endif
