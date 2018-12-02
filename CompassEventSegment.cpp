@@ -159,7 +159,11 @@ CompassEventSegment::read(void* pBuffer, size_t maxwords)
   if (!(dppData || wfData)) {
     return 0;                            // No event.
   }
-  setTimestamp(dppData->TimeTag);        // Event timestamp.
+  
+  // Note that both the 730 and 725 have a timestamp in 8ns granularity.
+  // We store the timestamp in ns in the body header:
+  
+  setTimestamp(dppData->TimeTag * 8);        // Event timestamp - in ns.
   setSourceId(m_id);                     // Source id from member data.         
   size_t eventSize = computeEventSize(*dppData, *wfData);
   
