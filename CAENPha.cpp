@@ -32,7 +32,20 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <math.h>
+#include <fstream>
+#include <sstream>
 
+static std::string trim( std::string str )
+{
+    // remove trailing white space
+    while( !str.empty() && std::isspace( str.back() ) ) str.pop_back() ;
+
+    // return residue after leading white space
+    std::size_t pos = 0 ;
+    while( pos < str.size() && std::isspace( str[pos] ) ) ++pos ;
+    return str.substr(pos) ;
+}
+/////////////////////////////////////////////////////////////////////////
 /**
  * Constructor
  *   Squirrel away the configuration.
@@ -45,11 +58,12 @@
  * @param startmode - Determines the start and multiboard synch modes:
  * @param trgout  - True if GPO is triggerout else it's synch.
  * @parm  delay   - start delay for clock synchronization.
+ * @param pCheatCFile - Pointer to register cheat file - nullptr means don't cheat.
  */
 CAENPha::CAENPha(
     CAENPhaParameters& config, CAEN_DGTZ_ConnectionType linkType, int linknum,
     int node, uint32_t base,
-    CAEN_DGTZ_AcqMode_t startMode, bool trgout, unsigned delay
+    CAEN_DGTZ_AcqMode_t startMode, bool trgout, unsigned delay, const char* pCheatFile
   ) :
   m_configuration(config),
   m_startMode(startMode),
@@ -59,7 +73,8 @@ CAENPha::CAENPha(
   m_rawSize(0),
   m_dppSize(0),
   m_pWaveforms(0),
-  m_wfSize(0)
+  m_wfSize(0),
+  m_pCheatFile(pCheatFile)
   
 {
   CAEN_DGTZ_ErrorCode status = CAEN_DGTZ_OpenDigitizer(linkType, linknum, node, base, &m_handle);
@@ -189,7 +204,7 @@ CAENPha::setup()
   if (status != CAEN_DGTZ_Success) {
     throw std::pair<std::string, int>("Failed to start or arm acquisition", status);
   }
-  
+  processCheatFile();
   
 }
 
@@ -782,4 +797,89 @@ CAENPha::fineGainRegister(double gain, int k, int m)
   int shf = log(double(k*m))/log(2.0);      // identity: logn(x) = log(x)/log(n)
   double result = 65535.0 * gain * (1 << shf)/double(k*m);
   return uint16_t(shf);
+}
+/**
+ * processCheatFile
+ *    Process the register cheat file.
+ *    If m_pCheatFile is nullptr, nothing is done.
+ *    Otherwise, the cheat file is opened and processed line by line.
+ *    The cheat file has the following format:
+ *    operation address value
+ *    Operation is one of
+ *       - . - set the value,
+ *       - # ignore the line (comment)
+ *       - | or the value into the register.
+ *       - * And the value into the registger
+ *       
+ *    address - is the address of the register to be modified.
+ *    value   - is the value that's either set or ored into the
+ *    register depending on the operation.
+ *    operation, addresss and value must  be separated by whitespace.
+ *    Lines with errors result in warnings but are ignored.
+ */
+void
+CAENPha::processCheatFile()
+{
+  if (!m_pCheatFile) return;
+  std::ifstream infile(m_pCheatFile);
+  if (!infile) {
+    std::cerr << "Cheat file: " << m_pCheatFile << "could not be opened\n";
+    return;
+  }
+  while (!infile.eof()) {
+    std::string line;
+    std::getline(infile, line);
+    line = trim(line);              // Lose leading and trailing whitespace.
+    if (!line.empty()) {            // Ignore blank lines.
+      std::stringstream s(line);
+      char op;
+      std::string sAddr;
+      uint32_t  addr;
+      uint32_t  value;
+      op = '\0';
+      s >> op >> sAddr >> value;
+      
+      
+      if ((s.fail()) && (op != '#')) {
+        std::cerr << "Warning: '" << line << "' was in error\n";
+        s.clear(std::ios_base::failbit);
+      } else {
+        
+        // What we do depends on the operation:
+        
+        
+        switch (op) {
+          case '#':                                    // comment.
+            break;
+          case '.':                                   // set:
+            {
+              addr = strtoul(sAddr.c_str(), nullptr, 0);
+              CAEN_DGTZ_WriteRegister(m_handle, addr, value);
+            }
+            break;
+          case '|':                                 // bitwise or.
+            {
+              addr = strtoul(sAddr.c_str(), nullptr, 0);
+              uint32_t currentValue;
+              CAEN_DGTZ_ReadRegister(m_handle, addr, &currentValue);
+              value |= currentValue;
+              CAEN_DGTZ_WriteRegister(m_handle, addr, value);
+            }
+            break;
+          case '*':                               // bitwise and.
+            {
+              addr = strtoul(sAddr.c_str(), nullptr, 0);
+              uint32_t currentValue;
+              CAEN_DGTZ_ReadRegister(m_handle, addr, &currentValue);
+              value &= currentValue;
+              CAEN_DGTZ_WriteRegister(m_handle, addr, value);
+            }
+            break;
+          default:                               // unrecognized operation.
+            std::cerr << "Unrecognized operation in '" << line << "'\n";
+            break;
+        }
+      }
+    }
+  }
 }

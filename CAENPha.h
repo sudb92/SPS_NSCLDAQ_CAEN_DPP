@@ -62,7 +62,7 @@ private:
   uint64_t           m_nTimestampAdjusts[CAEN_DGTZ_MAX_CHANNEL];
   uint64_t           m_nLastTimestamp[CAEN_DGTZ_MAX_CHANNEL];
   unsigned           m_nsPerTick; /* Nanoseconds per digitizer clock. */
-  
+  const char*        m_pCheatFile;
   
   // Other data
   
@@ -70,7 +70,7 @@ private:
 public:
   CAENPha(CAENPhaParameters& config, CAEN_DGTZ_ConnectionType linkType, int linknum,
           int node, uint32_t base, CAEN_DGTZ_AcqMode_t startMode,
-          bool trgout, unsigned delay);
+          bool trgout, unsigned delay, const char* pCheatFile=0);
   ~CAENPha();
   void setup();
   void shutdown();
@@ -94,5 +94,6 @@ private:
   void fillBuffers();
   int  findEarliest();
   uint16_t fineGainRegister(double value, int k, int m);
+  void processCheatFile();
 };
 #endif

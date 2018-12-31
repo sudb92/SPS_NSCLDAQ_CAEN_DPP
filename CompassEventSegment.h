@@ -40,12 +40,13 @@ private:
     int                      m_nLinkNum;
     int                      m_nNode;
     uint32_t                 m_nBase;
-    
+    const char*              m_pCheatFile;
     
 public:
     CompassEventSegment(
         std::string filename, int sourceId,
-        CAEN_DGTZ_ConnectionType linkType, int linkNum, int node, int base
+        CAEN_DGTZ_ConnectionType linkType, int linkNum, int node, int base,
+        const char* pCheatFile=nullptr
     );
     virtual ~CompassEventSegment();
     

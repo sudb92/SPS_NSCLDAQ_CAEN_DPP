@@ -39,13 +39,15 @@
  *  @param linknum  - If CONNET, the link number of the interface.
  *  @param node     - If CONNET, the node on the daisy chain.
  *  @param base     - If necessary the module base addresss.
+ *  @param pCheatFile - if not nullptr - register cheat file name.
  */
 CompassEventSegment::CompassEventSegment(
         std::string filename, int sourceId,
-        CAEN_DGTZ_ConnectionType linkType, int linkNum, int node, int base
+        CAEN_DGTZ_ConnectionType linkType, int linkNum, int node, int base,
+				const char* pCheatFile
 	) : m_filename(filename), m_board(nullptr), m_id(sourceId),
     m_linkType(linkType), m_nLinkNum(linkNum), m_nNode(node), 
-    m_nBase(base) 
+    m_nBase(base) , m_pCheatFile(pCheatFile)
 {
     
 }
@@ -214,9 +216,10 @@ CompassEventSegment::setupBoard(CAENPhaParameters& board)
     m_board = nullptr;
     m_board = new CAENPha(
         board, m_linkType, m_nLinkNum,
-	m_nNode, m_nBase,
+				m_nNode, m_nBase,
         board.s_startMode, true,                    // TODO get this from board
-        board.startDelay
+        board.startDelay,
+				m_pCheatFile
     );
     m_board->setup();
     
