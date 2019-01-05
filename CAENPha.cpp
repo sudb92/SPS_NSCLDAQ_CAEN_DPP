@@ -830,36 +830,41 @@ CAENPha::processCheatFile()
     std::string line;
     std::getline(infile, line);
     line = trim(line);              // Lose leading and trailing whitespace.
-    if (!line.empty()) {            // Ignore blank lines.
+    if (!line.empty()) {            // Ignore blank lines which are empty after trimming.
       std::stringstream s(line);
       char op;
       std::string sAddr;
+      std::string sValue;
       uint32_t  addr;
       uint32_t  value;
       op = '\0';
-      s >> op >> sAddr >> value;
+      s >> op >> sAddr >> sValue;
       
       
-      if ((s.fail()) && (op != '#')) {
+      if (s.fail())  {  // Note that I don't think the decode can fail going into strings...
         std::cerr << "Warning: '" << line << "' was in error\n";
         s.clear(std::ios_base::failbit);
       } else {
         
         // What we do depends on the operation:
         
+        // If the operation is not a comment, we can decode the address and
+        // value:
         
+        if (op != '#')   {
+          addr  = strtoul(sAddr.c_str(), nullptr, 0);
+          value = strtoul(sValue.c_str(), nullptr, 0);
+        }
         switch (op) {
           case '#':                                    // comment.
             break;
           case '.':                                   // set:
             {
-              addr = strtoul(sAddr.c_str(), nullptr, 0);
               CAEN_DGTZ_WriteRegister(m_handle, addr, value);
             }
             break;
           case '|':                                 // bitwise or.
             {
-              addr = strtoul(sAddr.c_str(), nullptr, 0);
               uint32_t currentValue;
               CAEN_DGTZ_ReadRegister(m_handle, addr, &currentValue);
               value |= currentValue;
@@ -868,7 +873,6 @@ CAENPha::processCheatFile()
             break;
           case '*':                               // bitwise and.
             {
-              addr = strtoul(sAddr.c_str(), nullptr, 0);
               uint32_t currentValue;
               CAEN_DGTZ_ReadRegister(m_handle, addr, &currentValue);
               value &= currentValue;
