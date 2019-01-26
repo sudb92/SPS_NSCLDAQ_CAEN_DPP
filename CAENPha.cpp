@@ -124,8 +124,10 @@ CAENPha::setup()
 
   if(boardInfo.FamilyCode == CAEN_DGTZ_XX730_FAMILY_CODE) {
     m_nsPerTick = 2;
+    m_nsPerTrigger = 16;
   } else if (boardInfo.FamilyCode == CAEN_DGTZ_XX725_FAMILY_CODE) {
     m_nsPerTick = 4;
+    m_nsPerTrigger = 32;
   } else {
     throw std::pair<std::string, int>("Un supported digitizer family", boardInfo.FamilyCode);
   }
@@ -200,11 +202,16 @@ CAENPha::setup()
   if (status != CAEN_DGTZ_Success) {
     throw std::pair<std::string, int>("Failed to malloc DPP Waveform storage", status);
   }
+  processCheatFile();
+  
+  // If in unsynchronized mode, this starts acquisition. If in synchronized mode,
+  // this arms acquisition.
+  
   status = CAEN_DGTZ_SWStartAcquisition(m_handle);
   if (status != CAEN_DGTZ_Success) {
     throw std::pair<std::string, int>("Failed to start or arm acquisition", status);
   }
-  processCheatFile();
+  
   
 }
 
@@ -312,6 +319,10 @@ CAENPha::Read()
   m_nLastTimestamp[channel] = pData->TimeTag;
   pData->TimeTag |= m_nTimestampAdjusts[channel]; // Fold in the wraps.
   
+  // Correcgt for the trigger clock speed to get  ns
+  
+  pData->TimeTag *= m_nsPerTrigger;           // Is this really right???? or is it 8ns??? not documented well.
+  
   // Construct/return the result:
   
   return std::make_tuple(channel,  pData, m_pWaveforms);
@@ -358,28 +369,41 @@ CAENPha::setTriggerAndSyncMode()
 
   // Start and synch mode are coupled:
 
+  
+  // Regardless, the start mode is the m_startMode:
+  
+  status = CAEN_DGTZ_SetAcquisitionMode(m_handle, m_startMode);
+  if (status != CAEN_DGTZ_Success) {
+    throw std::pair<std::string, int>("Failed to set acq mode to sw controlled", status);
+  }
+  
   switch (m_startMode) {
   case CAEN_DGTZ_SW_CONTROLLED :
-    status = CAEN_DGTZ_SetAcquisitionMode(m_handle, CAEN_DGTZ_SW_CONTROLLED);
-    if (status != CAEN_DGTZ_Success) {
-      throw std::pair<std::string, int>("Failed to set acq mode to sw controlled", status);
-    }
     status = CAEN_DGTZ_SetRunSynchronizationMode(m_handle, CAEN_DGTZ_RUN_SYNC_Disabled);
     if (status != CAEN_DGTZ_Success) {
       throw std::pair<std::string, int>("Failed to set run sync mode to Disabled", status);
     }
+    
     break;
   case CAEN_DGTZ_FIRST_TRG_CONTROLLED :
-    status = CAEN_DGTZ_WriteRegister(m_handle, CAEN_DGTZ_ACQ_CONTROL_ADD,  0x02);
+    status = CAEN_DGTZ_SetRunSynchronizationMode(m_handle, CAEN_DGTZ_RUN_SYNC_TrgOutTrgInDaisyChain);
     if (status != CAEN_DGTZ_Success) {
-      throw std::pair<std::string, int>("Failed to set run start on rising trigger edge", status);
+      throw std::pair<std::string, int>("Failed to set run sync mode to Disabled", status);
     }
-    status = CAEN_DGTZ_WriteRegister(m_handle, 0x8170, m_startDelay);
+    status = CAEN_DGTZ_WriteRegister(m_handle, 0x8170, m_startDelay/m_nsPerTrigger);
     if (status != CAEN_DGTZ_Success) {
-      throw std::pair<std::string, int>("Failed to set start delay", status);
+      throw std::pair<std::string, int>("Failed to set run sync mode to Disabled", status);
     }
     break;
   case CAEN_DGTZ_S_IN_CONTROLLED:
+    status = CAEN_DGTZ_SetRunSynchronizationMode(m_handle, CAEN_DGTZ_RUN_SYNC_TrgOutSinDaisyChain);
+    if (status != CAEN_DGTZ_Success) {
+      throw std::pair<std::string, int>("Failed to set run start on SIN", status);
+    }
+    status = CAEN_DGTZ_WriteRegister(m_handle, 0x8170, m_startDelay / m_nsPerTrigger);
+    if (status != CAEN_DGTZ_Success) {
+      throw std::pair<std::string, int>("Failed to set start delay", status);
+    }    
     //   Software start will arm the board.
     break;
   default:
@@ -416,6 +440,9 @@ CAENPha::setTriggerAndSyncMode()
   if (status != CAEN_DGTZ_Success) {
     throw std::pair<std::string, int>("Unable to set GPO mode", status);
   }
+  // Set the Front Panel I/O control register.
+  
+  status = CAEN_DGTZ_WriteRegister(m_handle, 0x811c, m_configuration.ioctlmask);
 
 }
 

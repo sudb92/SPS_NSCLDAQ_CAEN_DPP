@@ -52,7 +52,7 @@ std::vector<std::pair<unsigned, pugi::xml_document*> > CAENPhaParameters::emptyD
 CAENPhaParameters::CAENPhaParameters(
     pugi::xml_document& dom, std::vector<std::pair<unsigned, pugi::xml_document*> >& chDoms) :
   m_dom(dom),
-  m_channelDoms(chDoms), acqMode(1)
+  m_channelDoms(chDoms), acqMode(1), ioctlmask(0)
 {}
 /**
  * Copy construction.
@@ -105,6 +105,7 @@ CAENPhaParameters::operator=(const CAENPhaParameters& rhs)
     s_startMode = rhs.s_startMode;
 
     m_channelParameters = rhs.m_channelParameters;
+    ioctlmask = rhs.ioctlmask;
 
   }
   return  *this;

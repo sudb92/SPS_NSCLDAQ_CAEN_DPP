@@ -165,7 +165,7 @@ CompassEventSegment::read(void* pBuffer, size_t maxwords)
   // Note that both the 730 and 725 have a timestamp in 8ns granularity.
   // We store the timestamp in ns in the body header:
   
-  setTimestamp(dppData->TimeTag * 8);        // Event timestamp - in ns.
+  setTimestamp(dppData->TimeTag);        // Event timestamp - in ns (CAENPha did that).
   setSourceId(m_id);                     // Source id from member data.         
   size_t eventSize = computeEventSize(*dppData, *wfData);
   
@@ -217,7 +217,7 @@ CompassEventSegment::setupBoard(CAENPhaParameters& board)
     m_board = new CAENPha(
         board, m_linkType, m_nLinkNum,
 				m_nNode, m_nBase,
-        board.s_startMode, true,                    // TODO get this from board
+        board.s_startMode, true, 
         board.startDelay,
 				m_pCheatFile
     );

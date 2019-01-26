@@ -67,6 +67,7 @@ protected:
     CAEN_DGTZ_ConnectionType stringToLinkType(const std::string& strType);
     CAEN_DGTZ_AcqMode_t  getStartMode(std::string modeString);
     unsigned gainToCode(double value);
+    uint32_t computeIoCtlMask(const std::string& enumText);
 };
 
 #endif

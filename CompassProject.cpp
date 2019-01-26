@@ -354,6 +354,7 @@ CompassProject::processBoardParameters(
   m_channelDefaults.baselineAdjust = 0;
   m_channelDefaults.digitalGain = 0;             // Gain code for 1 (decimation gain).
   m_channelDefaults.fineGain    = 1.0;           // Default fine gain.
+  board.triggerSource= CAENPhaParameters::internal;
 
     // Load the connection parameters into connection.  Note that
     // if there's no base address, we load a zero...could be USB or CONET
@@ -443,6 +444,7 @@ CompassProject::processBoardParameters(
  *   SRV_PARAM_START_MODE  - How acquisition starts:
  *                            START_MODE_SW Software start.
  *                            START_MODE_SIN - SIN after software start.
+ *                            START_MODE_FIRST_TRG  First trigger after sw start.
  *                            
  *   SRV_PARAM_TIMEBOMBDOWNCOUNTER Firmware timebomb down counter is not used.
  *   SRV_PARAM_CH_ENABLED  - Defaul channel enable. (boolean)
@@ -537,8 +539,9 @@ CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& 
         m_channelDefaults.polarity = pol; // Default polarity.
         
     } else if (key == "SRV_PARAM_OUT_SELECTION") {   // OUT/Sum output selection(?)
+      board.ioctlmask = computeIoCtlMask(getValue(param));
         
-                                           // Ignored for now can be: 
+                                           // Can be: 
         /*                                   OUT_PROPAGATION_TRIGGER - propagates the trigger.
         *                                   OUT_PROPAGATION_TEST_0,
         *                                   OUT_PROPAGATION_TEST_1,
@@ -641,13 +644,14 @@ CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& 
     } else if (key == "SRV_PARAM_EXTRAS") {
                                         // Enable extra recording (always true).  
     } else if (key == "SRV_PARAM_TRG_EXT_OUT_PROPAGATE") {
-                                        // External trigger -> trgout (ignored for now)
+                                       // External trigger -> trgout (ignored for now)
     } else if (key == "SRV_PARAM_RECLEN") { 
                                     // Length of recorded waveform.
       board.recordLength = getDoubleValue(param);
-        
+
     } else if (key == "SRV_PARAM_START_DELAY") {
-      unsigned startDelay = nsToSamples(getDoubleValue(param));   // start delay (synch).
+      unsigned startDelay = getDoubleValue(param);  // start delay in ns
+      board.startDelay = startDelay;
         
     } else if (key == "SRV_PARAM_TRG_EXT_ENABLE" ) {
         bool extTriggerEnable = getBoolValue(param);   // Compute trigger Control
@@ -908,4 +912,55 @@ CompassProject::gainToCode(double value)
   } else {
     throw std::string("Invalid value for FINEGAIN  must be 1, 2, 4, or 8");
   }
+}
+/**
+* computeIoCtlMask
+* Convert the string value of the I/O OUT_SELECTion to a mask of the bits
+* in positions 16-19 of the I/O control register.
+*
+*  @param enumValue - the string value that describes what to do:
+*
+* Valid values are:
+* OUT_PROPAGATION_TRIGGER - propagates the trigger.
+* OUT_PROPAGATION_TEST_0,
+* OUT_PROPAGATION_TEST_1,
+* OUT_PROPAGATION_ACQ_ON - True if data acquisition is on.
+* OUT_PROPAGATION_SAMPLE_CLK - Output the sampling clock.
+* OUT_PROPAGATION_PLL_CLK - Output is the PLL clock input.
+* OUT_PROPAGATION_BUSY - output the digitizer busy.
+* OUT_PROPAGATION_PLL_LOCK - State of the PLL Lock.
+* OUT_PROPAGATION_VPROBE - Output a virtual probe.
+* OUT_PROPAGATION_SYNCIN - Output the sync in pulse.
+*
+*  @return uint32_t  - value to plug into the I/O Control register.
+*/
+uint32_t
+CompassProject::computeIoCtlMask(const std::string& enumValue)
+{
+   uint32_t result;
+   if (enumValue == "OUT_PROPAGATION_TRIGGER") {
+      result = 0;
+   } else if (enumValue == "OUT_PROPAGATION_TEST_0") { // Not certain how
+      result = 0x10000;                                // test map..
+   } else if (enumValue == "OUT_PROPAGATION_TEST_1") { // but hopefully we're
+      result = 0x20000;                                // not in test mode.
+   } else if (enumValue == "OUT_PROPAGATION_ACQ_ON") {
+      result = 0x10000;
+   } else if (enumValue == "OUT_PROPAGATION_SAMPLE_CLK") {
+      result = 0x50000;
+   } else if (enumValue == "OUT_PROPAGATION_PLL_CLK") {
+      result = 0x90000;
+   } else if (enumValue == "OUT_PROPAGATION_BUSY") {
+      result = 0xd0000;
+   } else if (enumValue == "OUT_PROPAGATION_PLL_LOCK") {
+      result = 0xd0000;            // I think these bits depend on fw version.
+   } else if (enumValue == "OUT_PROPAGATION_VPROBE") {
+      result = 0x20000;             // Virtual probe.
+   } else if (enumValue == "OUT_PROPAGATION_SYNCIN") {
+      result = 0x30000;     
+   } else {
+      throw std::string("Unrecognized value for SRV_PARAM_OUT_SELECTION ");
+   }
+   
+   return result;
 }

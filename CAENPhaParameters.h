@@ -106,6 +106,7 @@ public:
   } GPIOGroupConfig;
 
   GPIOGroupConfig groupconfigs[2];
+  uint32_t        ioctlmask;        // Bits 16-19 of the FP I/O control reg.
 
   // With compass:
   

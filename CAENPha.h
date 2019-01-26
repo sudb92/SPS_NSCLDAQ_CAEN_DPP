@@ -62,6 +62,7 @@ private:
   uint64_t           m_nTimestampAdjusts[CAEN_DGTZ_MAX_CHANNEL];
   uint64_t           m_nLastTimestamp[CAEN_DGTZ_MAX_CHANNEL];
   unsigned           m_nsPerTick; /* Nanoseconds per digitizer clock. */
+  unsigned           m_nsPerTrigger;  // ns per trigger clock tick.
   const char*        m_pCheatFile;
   
   // Other data
