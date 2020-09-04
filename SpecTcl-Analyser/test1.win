@@ -1,0 +1,15 @@
+Geometry 1,3
+# /home/daq2/Downloads/TwoBoardTest/Skel/test1.win Written by @(#)dispwind.cc	2.2 1/28/94  at Wed Aug 19 12:06:00 2020
+
+Window  0,0,"13"
+   SCALE Manual 256
+   MAPPED 1
+Endwindow
+Window  0,1,"20"
+   SCALE Manual 256
+   MAPPED 1
+Endwindow
+Window  0,2,"dT"
+   SCALE Manual 256
+   MAPPED 1
+Endwindow

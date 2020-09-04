@@ -1,0 +1,462 @@
+Board config,     8000						Board config,     8000
+  Addr 8000 : 110						  Addr 8000 : 110
+Record length     1020						Record length     1020
+  Addr 1020 : 80						  Addr 1020 : 80
+  Addr 1120 : 80						  Addr 1120 : 80
+  Addr 1220 : 80						  Addr 1220 : 80
+  Addr 1320 : 80						  Addr 1320 : 80
+  Addr 1420 : 80						  Addr 1420 : 80
+  Addr 1520 : 80						  Addr 1520 : 80
+  Addr 1620 : 80						  Addr 1620 : 80
+  Addr 1720 : 80						  Addr 1720 : 80
+  Addr 1820 : 80						  Addr 1820 : 80
+  Addr 1920 : 80						  Addr 1920 : 80
+  Addr 1a20 : 80						  Addr 1a20 : 80
+  Addr 1b20 : 80						  Addr 1b20 : 80
+  Addr 1c20 : 80						  Addr 1c20 : 80
+  Addr 1d20 : 80						  Addr 1d20 : 80
+  Addr 1e20 : 80						  Addr 1e20 : 80
+  Addr 1f20 : 80						  Addr 1f20 : 80
+Dynamic Range     1028						Dynamic Range     1028
+  Addr 1028 : 0							  Addr 1028 : 0
+  Addr 1128 : 0							  Addr 1128 : 0
+  Addr 1228 : 0							  Addr 1228 : 0
+  Addr 1328 : 0							  Addr 1328 : 0
+  Addr 1428 : 0							  Addr 1428 : 0
+  Addr 1528 : 0							  Addr 1528 : 0
+  Addr 1628 : 0							  Addr 1628 : 0
+  Addr 1728 : 0							  Addr 1728 : 0
+  Addr 1828 : 0							  Addr 1828 : 0
+  Addr 1928 : 0							  Addr 1928 : 0
+  Addr 1a28 : 0							  Addr 1a28 : 0
+  Addr 1b28 : 0							  Addr 1b28 : 0
+  Addr 1c28 : 0							  Addr 1c28 : 0
+  Addr 1d28 : 0							  Addr 1d28 : 0
+  Addr 1e28 : 0							  Addr 1e28 : 0
+  Addr 1f28 : 0							  Addr 1f28 : 0
+PreTrigger       1038						PreTrigger       1038
+  Addr 1038 : 10						  Addr 1038 : 10
+  Addr 1138 : 10						  Addr 1138 : 10
+  Addr 1238 : 10						  Addr 1238 : 10
+  Addr 1338 : 10						  Addr 1338 : 10
+  Addr 1438 : 10						  Addr 1438 : 10
+  Addr 1538 : 10						  Addr 1538 : 10
+  Addr 1638 : 10						  Addr 1638 : 10
+  Addr 1738 : 10						  Addr 1738 : 10
+  Addr 1838 : 10						  Addr 1838 : 10
+  Addr 1938 : 10						  Addr 1938 : 10
+  Addr 1a38 : 10						  Addr 1a38 : 10
+  Addr 1b38 : 10						  Addr 1b38 : 10
+  Addr 1c38 : 10						  Addr 1c38 : 10
+  Addr 1d38 : 10						  Addr 1d38 : 10
+  Addr 1e38 : 10						  Addr 1e38 : 10
+  Addr 1f38 : 10						  Addr 1f38 : 10
+RC-CR2 smoothing  1054						RC-CR2 smoothing  1054
+  Addr 1054 : 10						  Addr 1054 : 10
+  Addr 1154 : 10						  Addr 1154 : 10
+  Addr 1254 : 10						  Addr 1254 : 10
+  Addr 1354 : 10						  Addr 1354 : 10
+  Addr 1454 : 10						  Addr 1454 : 10
+  Addr 1554 : 10						  Addr 1554 : 10
+  Addr 1654 : 10						  Addr 1654 : 10
+  Addr 1754 : 10						  Addr 1754 : 10
+  Addr 1854 : 10						  Addr 1854 : 10
+  Addr 1954 : 10						  Addr 1954 : 10
+  Addr 1a54 : 10						  Addr 1a54 : 10
+  Addr 1b54 : 10						  Addr 1b54 : 10
+  Addr 1c54 : 10						  Addr 1c54 : 10
+  Addr 1d54 : 10						  Addr 1d54 : 10
+  Addr 1e54 : 10						  Addr 1e54 : 10
+  Addr 1f54 : 10						  Addr 1f54 : 10
+Input Rise Time  1058						Input Rise Time  1058
+  Addr 1058 : a							  Addr 1058 : a
+  Addr 1158 : a							  Addr 1158 : a
+  Addr 1258 : a							  Addr 1258 : a
+  Addr 1358 : a							  Addr 1358 : a
+  Addr 1458 : a							  Addr 1458 : a
+  Addr 1558 : a							  Addr 1558 : a
+  Addr 1658 : a							  Addr 1658 : a
+  Addr 1758 : a							  Addr 1758 : a
+  Addr 1858 : a							  Addr 1858 : a
+  Addr 1958 : a							  Addr 1958 : a
+  Addr 1a58 : a							  Addr 1a58 : a
+  Addr 1b58 : a							  Addr 1b58 : a
+  Addr 1c58 : a							  Addr 1c58 : a
+  Addr 1d58 : a							  Addr 1d58 : a
+  Addr 1e58 : a							  Addr 1e58 : a
+  Addr 1f58 : a							  Addr 1f58 : a
+Trap Rise Time   105c						Trap Rise Time   105c
+  Addr 105c : c8						  Addr 105c : c8
+  Addr 115c : c8						  Addr 115c : c8
+  Addr 125c : c8						  Addr 125c : c8
+  Addr 135c : c8						  Addr 135c : c8
+  Addr 145c : c8						  Addr 145c : c8
+  Addr 155c : c8						  Addr 155c : c8
+  Addr 165c : c8						  Addr 165c : c8
+  Addr 175c : c8						  Addr 175c : c8
+  Addr 185c : c8						  Addr 185c : c8
+  Addr 195c : c8						  Addr 195c : c8
+  Addr 1a5c : c8						  Addr 1a5c : c8
+  Addr 1b5c : c8						  Addr 1b5c : c8
+  Addr 1c5c : c8						  Addr 1c5c : c8
+  Addr 1d5c : c8						  Addr 1d5c : c8
+  Addr 1e5c : c8						  Addr 1e5c : c8
+  Addr 1f5c : c8						  Addr 1f5c : c8
+Trap Flat Top    1060						Trap Flat Top    1060
+  Addr 1060 : 32						  Addr 1060 : 32
+  Addr 1160 : 32						  Addr 1160 : 32
+  Addr 1260 : 32						  Addr 1260 : 32
+  Addr 1360 : 32						  Addr 1360 : 32
+  Addr 1460 : 32						  Addr 1460 : 32
+  Addr 1560 : 32						  Addr 1560 : 32
+  Addr 1660 : 32						  Addr 1660 : 32
+  Addr 1760 : 32						  Addr 1760 : 32
+  Addr 1860 : 32						  Addr 1860 : 32
+  Addr 1960 : 32						  Addr 1960 : 32
+  Addr 1a60 : 32						  Addr 1a60 : 32
+  Addr 1b60 : 32						  Addr 1b60 : 32
+  Addr 1c60 : 32						  Addr 1c60 : 32
+  Addr 1d60 : 32						  Addr 1d60 : 32
+  Addr 1e60 : 32						  Addr 1e60 : 32
+  Addr 1f60 : 32						  Addr 1f60 : 32
+Peaking time     1064						Peaking time     1064
+  Addr 1064 : 1e						  Addr 1064 : 1e
+  Addr 1164 : 1e						  Addr 1164 : 1e
+  Addr 1264 : 1e						  Addr 1264 : 1e
+  Addr 1364 : 1e						  Addr 1364 : 1e
+  Addr 1464 : 1e						  Addr 1464 : 1e
+  Addr 1564 : 1e						  Addr 1564 : 1e
+  Addr 1664 : 1e						  Addr 1664 : 1e
+  Addr 1764 : 1e						  Addr 1764 : 1e
+  Addr 1864 : 1e						  Addr 1864 : 1e
+  Addr 1964 : 1e						  Addr 1964 : 1e
+  Addr 1a64 : 1e						  Addr 1a64 : 1e
+  Addr 1b64 : 1e						  Addr 1b64 : 1e
+  Addr 1c64 : 1e						  Addr 1c64 : 1e
+  Addr 1d64 : 1e						  Addr 1d64 : 1e
+  Addr 1e64 : 1e						  Addr 1e64 : 1e
+  Addr 1f64 : 1e						  Addr 1f64 : 1e
+Decay Time       1068						Decay Time       1068
+  Addr 1068 : 1388						  Addr 1068 : 1388
+  Addr 1168 : 1388						  Addr 1168 : 1388
+  Addr 1268 : 1388						  Addr 1268 : 1388
+  Addr 1368 : 1388						  Addr 1368 : 1388
+  Addr 1468 : 1388						  Addr 1468 : 1388
+  Addr 1568 : 1388						  Addr 1568 : 1388
+  Addr 1668 : 1388						  Addr 1668 : 1388
+  Addr 1768 : 1388						  Addr 1768 : 1388
+  Addr 1868 : 1388						  Addr 1868 : 1388
+  Addr 1968 : 1388						  Addr 1968 : 1388
+  Addr 1a68 : 1388						  Addr 1a68 : 1388
+  Addr 1b68 : 1388						  Addr 1b68 : 1388
+  Addr 1c68 : 1388						  Addr 1c68 : 1388
+  Addr 1d68 : 1388						  Addr 1d68 : 1388
+  Addr 1e68 : 1388						  Addr 1e68 : 1388
+  Addr 1f68 : 1388						  Addr 1f68 : 1388
+Trigger thresh   106c						Trigger thresh   106c
+  Addr 106c : 64						  Addr 106c : 64
+  Addr 116c : 64						  Addr 116c : 64
+  Addr 126c : 64						  Addr 126c : 64
+  Addr 136c : 64						  Addr 136c : 64
+  Addr 146c : 64						  Addr 146c : 64
+  Addr 156c : 64						  Addr 156c : 64
+  Addr 166c : 64						  Addr 166c : 64
+  Addr 176c : 64						  Addr 176c : 64
+  Addr 186c : 64						  Addr 186c : 64
+  Addr 196c : 64						  Addr 196c : 64
+  Addr 1a6c : 64						  Addr 1a6c : 64
+  Addr 1b6c : 64						  Addr 1b6c : 64
+  Addr 1c6c : 64						  Addr 1c6c : 64
+  Addr 1d6c : 64						  Addr 1d6c : 64
+  Addr 1e6c : 64						  Addr 1e6c : 64
+  Addr 1f6c : 64						  Addr 1f6c : 64
+Rise T Val Win   1070						Rise T Val Win   1070
+  Addr 1070 : 0							  Addr 1070 : 0
+  Addr 1170 : 0							  Addr 1170 : 0
+  Addr 1270 : 0							  Addr 1270 : 0
+  Addr 1370 : 0							  Addr 1370 : 0
+  Addr 1470 : 0							  Addr 1470 : 0
+  Addr 1570 : 0							  Addr 1570 : 0
+  Addr 1670 : 0							  Addr 1670 : 0
+  Addr 1770 : 0							  Addr 1770 : 0
+  Addr 1870 : 0							  Addr 1870 : 0
+  Addr 1970 : 0							  Addr 1970 : 0
+  Addr 1a70 : 0							  Addr 1a70 : 0
+  Addr 1b70 : 0							  Addr 1b70 : 0
+  Addr 1c70 : 0							  Addr 1c70 : 0
+  Addr 1d70 : 0							  Addr 1d70 : 0
+  Addr 1e70 : 0							  Addr 1e70 : 0
+  Addr 1f70 : 0							  Addr 1f70 : 0
+Trigger holdoff  1074						Trigger holdoff  1074
+  Addr 1074 : a							  Addr 1074 : a
+  Addr 1174 : a							  Addr 1174 : a
+  Addr 1274 : a							  Addr 1274 : a
+  Addr 1374 : a							  Addr 1374 : a
+  Addr 1474 : a							  Addr 1474 : a
+  Addr 1574 : a							  Addr 1574 : a
+  Addr 1674 : a							  Addr 1674 : a
+  Addr 1774 : a							  Addr 1774 : a
+  Addr 1874 : a							  Addr 1874 : a
+  Addr 1974 : a							  Addr 1974 : a
+  Addr 1a74 : a							  Addr 1a74 : a
+  Addr 1b74 : a							  Addr 1b74 : a
+  Addr 1c74 : a							  Addr 1c74 : a
+  Addr 1d74 : a							  Addr 1d74 : a
+  Addr 1e74 : a							  Addr 1e74 : a
+  Addr 1f74 : a							  Addr 1f74 : a
+Peak hold off    1078						Peak hold off    1078
+  Addr 1078 : 8							  Addr 1078 : 8
+  Addr 1178 : 8							  Addr 1178 : 8
+  Addr 1278 : 8							  Addr 1278 : 8
+  Addr 1378 : 8							  Addr 1378 : 8
+  Addr 1478 : 8							  Addr 1478 : 8
+  Addr 1578 : 8							  Addr 1578 : 8
+  Addr 1678 : 8							  Addr 1678 : 8
+  Addr 1778 : 8							  Addr 1778 : 8
+  Addr 1878 : 8							  Addr 1878 : 8
+  Addr 1978 : 8							  Addr 1978 : 8
+  Addr 1a78 : 8							  Addr 1a78 : 8
+  Addr 1b78 : 8							  Addr 1b78 : 8
+  Addr 1c78 : 8							  Addr 1c78 : 8
+  Addr 1d78 : 8							  Addr 1d78 : 8
+  Addr 1e78 : 8							  Addr 1e78 : 8
+  Addr 1f78 : 8							  Addr 1f78 : 8
+Baseline hld off 107c						Baseline hld off 107c
+  Addr 107c : a							  Addr 107c : a
+  Addr 117c : a							  Addr 117c : a
+  Addr 127c : a							  Addr 127c : a
+  Addr 137c : a							  Addr 137c : a
+  Addr 147c : a							  Addr 147c : a
+  Addr 157c : a							  Addr 157c : a
+  Addr 167c : a							  Addr 167c : a
+  Addr 177c : a							  Addr 177c : a
+  Addr 187c : a							  Addr 187c : a
+  Addr 197c : a							  Addr 197c : a
+  Addr 1a7c : a							  Addr 1a7c : a
+  Addr 1b7c : a							  Addr 1b7c : a
+  Addr 1c7c : a							  Addr 1c7c : a
+  Addr 1d7c : a							  Addr 1d7c : a
+  Addr 1e7c : a							  Addr 1e7c : a
+  Addr 1f7c : a							  Addr 1f7c : a
+DPP Control      1080						DPP Control      1080
+  Addr 1080 : 0							  Addr 1080 : 0
+  Addr 1180 : 0							  Addr 1180 : 0
+  Addr 1280 : 0							  Addr 1280 : 0
+  Addr 1380 : 0							  Addr 1380 : 0
+  Addr 1480 : 0							  Addr 1480 : 0
+  Addr 1580 : 0							  Addr 1580 : 0
+  Addr 1680 : 0							  Addr 1680 : 0
+  Addr 1780 : 0							  Addr 1780 : 0
+  Addr 1880 : 0							  Addr 1880 : 0
+  Addr 1980 : 0							  Addr 1980 : 0
+  Addr 1a80 : 0							  Addr 1a80 : 0
+  Addr 1b80 : 0							  Addr 1b80 : 0
+  Addr 1c80 : 0							  Addr 1c80 : 0
+  Addr 1d80 : 0							  Addr 1d80 : 0
+  Addr 1e80 : 0							  Addr 1e80 : 0
+  Addr 1f80 : 0							  Addr 1f80 : 0
+DC Offset        1098						DC Offset        1098
+  Addr 1098 : 8000						  Addr 1098 : 8000
+  Addr 1198 : 8000						  Addr 1198 : 8000
+  Addr 1298 : 8000						  Addr 1298 : 8000
+  Addr 1398 : 8000						  Addr 1398 : 8000
+  Addr 1498 : 8000						  Addr 1498 : 8000
+  Addr 1598 : 8000						  Addr 1598 : 8000
+  Addr 1698 : 8000						  Addr 1698 : 8000
+  Addr 1798 : 8000						  Addr 1798 : 8000
+  Addr 1898 : 8000						  Addr 1898 : 8000
+  Addr 1998 : 8000						  Addr 1998 : 8000
+  Addr 1a98 : 8000						  Addr 1a98 : 8000
+  Addr 1b98 : 8000						  Addr 1b98 : 8000
+  Addr 1c98 : 8000						  Addr 1c98 : 8000
+  Addr 1d98 : 8000						  Addr 1d98 : 8000
+  Addr 1e98 : 8000						  Addr 1e98 : 8000
+  Addr 1f98 : 8000						  Addr 1f98 : 8000
+DPP Control 2    10a0						DPP Control 2    10a0
+  Addr 10a0 : 7							  Addr 10a0 : 7
+  Addr 11a0 : 7							  Addr 11a0 : 7
+  Addr 12a0 : 7							  Addr 12a0 : 7
+  Addr 13a0 : 7							  Addr 13a0 : 7
+  Addr 14a0 : 7							  Addr 14a0 : 7
+  Addr 15a0 : 7							  Addr 15a0 : 7
+  Addr 16a0 : 7							  Addr 16a0 : 7
+  Addr 17a0 : 7							  Addr 17a0 : 7
+  Addr 18a0 : 7							  Addr 18a0 : 7
+  Addr 19a0 : 7							  Addr 19a0 : 7
+  Addr 1aa0 : 7							  Addr 1aa0 : 7
+  Addr 1ba0 : 7							  Addr 1ba0 : 7
+  Addr 1ca0 : 7							  Addr 1ca0 : 7
+  Addr 1da0 : 7							  Addr 1da0 : 7
+  Addr 1ea0 : 7							  Addr 1ea0 : 7
+  Addr 1fa0 : 7							  Addr 1fa0 : 7
+Fine gain        104c						Fine gain        104c
+  Addr 104c : 7							  Addr 104c : 7
+  Addr 114c : 7							  Addr 114c : 7
+  Addr 124c : 7							  Addr 124c : 7
+  Addr 134c : 7							  Addr 134c : 7
+  Addr 144c : 7							  Addr 144c : 7
+  Addr 154c : 7							  Addr 154c : 7
+  Addr 164c : 7							  Addr 164c : 7
+  Addr 174c : 7							  Addr 174c : 7
+  Addr 184c : 7							  Addr 184c : 7
+  Addr 194c : 7							  Addr 194c : 7
+  Addr 1a4c : 7							  Addr 1a4c : 7
+  Addr 1b4c : 7							  Addr 1b4c : 7
+  Addr 1c4c : 7							  Addr 1c4c : 7
+  Addr 1d4c : 7							  Addr 1d4c : 7
+  Addr 1e4c : 7							  Addr 1e4c : 7
+  Addr 1f4c : 7							  Addr 1f4c : 7
+Pre Trigger      1038						Pre Trigger      1038
+  Addr 1038 : 10						  Addr 1038 : 10
+  Addr 1138 : 10						  Addr 1138 : 10
+  Addr 1238 : 10						  Addr 1238 : 10
+  Addr 1338 : 10						  Addr 1338 : 10
+  Addr 1438 : 10						  Addr 1438 : 10
+  Addr 1538 : 10						  Addr 1538 : 10
+  Addr 1638 : 10						  Addr 1638 : 10
+  Addr 1738 : 10						  Addr 1738 : 10
+  Addr 1838 : 10						  Addr 1838 : 10
+  Addr 1938 : 10						  Addr 1938 : 10
+  Addr 1a38 : 10						  Addr 1a38 : 10
+  Addr 1b38 : 10						  Addr 1b38 : 10
+  Addr 1c38 : 10						  Addr 1c38 : 10
+  Addr 1d38 : 10						  Addr 1d38 : 10
+  Addr 1e38 : 10						  Addr 1e38 : 10
+  Addr 1f38 : 10						  Addr 1f38 : 10
+Stop bits        1040						Stop bits        1040
+  Addr 1040 : 0							  Addr 1040 : 0
+  Addr 1140 : 0							  Addr 1140 : 0
+  Addr 1240 : 0							  Addr 1240 : 0
+  Addr 1340 : 0							  Addr 1340 : 0
+  Addr 1440 : 0							  Addr 1440 : 0
+  Addr 1540 : 0							  Addr 1540 : 0
+  Addr 1640 : 0							  Addr 1640 : 0
+  Addr 1740 : 0							  Addr 1740 : 0
+  Addr 1840 : 0							  Addr 1840 : 0
+  Addr 1940 : 0							  Addr 1940 : 0
+  Addr 1a40 : 0							  Addr 1a40 : 0
+  Addr 1b40 : 0							  Addr 1b40 : 0
+  Addr 1c40 : 0							  Addr 1c40 : 0
+  Addr 1d40 : 0							  Addr 1d40 : 0
+  Addr 1e40 : 0							  Addr 1e40 : 0
+  Addr 1f40 : 0							  Addr 1f40 : 0
+
+8020  Addr 8020 : 0						8020  Addr 8020 : 0
+
+1088  Addr 1088 : fa						1088  Addr 1088 : fa
+
+108c  Addr 108c : 18018b08					108c  Addr 108c : 18018b08
+
+10a8  Addr 10a8 : 23						10a8  Addr 10a8 : 23
+
+8000  Addr 8000 : 110						8000  Addr 8000 : 110
+
+800c  Addr 800c : a						800c  Addr 800c : a
+
+8100  Addr 8100 : 0						8100  Addr 8100 : 0
+
+8104  Addr 8104 : 1a0						8104  Addr 8104 : 1a0
+
+810c  Addr 810c : c0000000					810c  Addr 810c : c0000000
+
+8110  Addr 8110 : 80000000					8110  Addr 8110 : 80000000
+
+8114  Addr 8114 : 0						8114  Addr 8114 : 0
+
+8118  Addr 8118 : ffff						8118  Addr 8118 : ffff
+
+811c  Addr 811c : 0						811c  Addr 811c : 0
+
+8120  Addr 8120 : ff						8120  Addr 8120 : ff
+
+8124  Addr 8124 : 1518040f					8124  Addr 8124 : 1518040f
+
+812c  Addr 812c : 0						812c  Addr 812c : 0
+
+8138  Addr 8138 : 0						8138  Addr 8138 : 0
+
+8140  Addr 8140 : 10010e					8140  Addr 8140 : 10010e
+
+8144  Addr 8144 : 0						8144  Addr 8144 : 0
+
+814c  Addr 814c : 0						814c  Addr 814c : 0
+
+8168  Addr 8168 : 20						8168  Addr 8168 : 20
+
+816c  Addr 816c : 0						816c  Addr 816c : 0
+
+8170  Addr 8170 : 0						8170  Addr 8170 : 0
+
+8178  Addr 8178 : 10					      |	8178  Addr 8178 : 0
+
+817c  Addr 817c : 0						817c  Addr 817c : 0
+
+8180  Addr 8180 : 20000000					8180  Addr 8180 : 20000000
+
+81a0  Addr 81a0 : 0						81a0  Addr 81a0 : 0
+
+81b4  Addr 81b4 : 0						81b4  Addr 81b4 : 0
+
+ef00  Addr ef00 : 10						ef00  Addr ef00 : 10
+
+ef04  Addr ef04 : ff0a						ef04  Addr ef04 : ff0a
+
+ef08  Addr ef08 : 0						ef08  Addr ef08 : 0
+
+ef0c  Addr ef0c : aa						ef0c  Addr ef0c : aa
+
+ef10  Addr ef10 : 0						ef10  Addr ef10 : 0
+
+ef14  Addr ef14 : dd						ef14  Addr ef14 : dd
+
+ef18  Addr ef18 : 0						ef18  Addr ef18 : 0
+
+ef1c  Addr ef1c : 1						ef1c  Addr ef1c : 1
+
+ef20  Addr ef20 : aaaaaaaa					ef20  Addr ef20 : aaaaaaaa
+
+f000  Addr f000 : f5						f000  Addr f000 : f5
+
+f004  Addr f004 : 0						f004  Addr f004 : 0
+
+f008  Addr f008 : 0						f008  Addr f008 : 0
+
+f00c  Addr f00c : 20						f00c  Addr f00c : 20
+
+f010  Addr f010 : 83						f010  Addr f010 : 83
+
+f014  Addr f014 : 84						f014  Addr f014 : 84
+
+f018  Addr f018 : 1						f018  Addr f018 : 1
+
+f01c  Addr f01c : 43						f01c  Addr f01c : 43
+
+f020  Addr f020 : 52						f020  Addr f020 : 52
+
+f024  Addr f024 : 0						f024  Addr f024 : 0
+
+f028  Addr f028 : 40						f028  Addr f028 : 40
+
+f02c  Addr f02c : e6						f02c  Addr f02c : e6
+
+f030  Addr f030 : f0						f030  Addr f030 : f0
+
+f034  Addr f034 : 0						f034  Addr f034 : 0
+
+f038  Addr f038 : 6						f038  Addr f038 : 6
+
+f03c  Addr f03c : bd						f03c  Addr f03c : bd
+
+f040  Addr f040 : 0						f040  Addr f040 : 0
+
+f044  Addr f044 : 0						f044  Addr f044 : 0
+
+f048  Addr f048 : 0						f048  Addr f048 : 0
+
+f04c  Addr f04c : 4						f04c  Addr f04c : 4
+
+f050  Addr f050 : 1						f050  Addr f050 : 1
+
+f080  Addr f080 : 1						f080  Addr f080 : 1
+
+f084  Addr f084 : 50						f084  Addr f084 : 50

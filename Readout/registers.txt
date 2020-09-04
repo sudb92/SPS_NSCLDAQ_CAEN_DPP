@@ -1,0 +1,43 @@
+Record-Length  1020 0
+Dynamic-range  1028 0
+Evts/aggregate 1034 0
+Pre-trigger    1038 0
+CFD-Settings   103c 0
+Q-zero-supression-Thrshold 1044 0
+Short-Gate-width 1054 0
+Long-Gate-width 1058  0
+Gate-Offset     105c 0
+Trigger-thresh  1060 0
+Fixed-bline     1064 0
+Shaped-trig-wid 1070 0
+Trg-Holdoff-wid 1074 0
+PSD-Cut-thresh  1078 0
+PUR-GAP-thresh  107c 0
+DPP-Algo-control 1080 0
+DPP-Algo-ctrl-2  1084 0
+Channel-status   1088 0
+DC-Offset        1098 0
+Veto-width       10d4 0
+Board-Config    8000   1
+Aggregate-org   800c   1
+Acquisition-ctrl 8100  1
+Global-trg-mask  810c  1
+FP-GPO-TRG-ena-mask  8110 1
+FP-IO-Control   811c   1
+Ch-enables      8120   1
+Analog-monitor  8144   1
+Start/stop-delay 8170  1
+ExtTrgDisable 817c 1
+Trg-Validation-01 8180 1
+Trg-Valiation-23  8184 1
+Trg-Valiation-45  8188 1
+Trg-Validation-67 818c 1
+Trg-Validation-89 8190 1
+Trg-Validation-ab 8194 1
+Trg-Validation-cd 8198 1
+Trg-Validation-ef 819c 1
+FP-LVDS-New-Featurs 81a0 1
+Agregates-per-blt   ef1c 1
+
+
+

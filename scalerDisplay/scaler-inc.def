@@ -1,0 +1,142 @@
+channel -incremental 1 0 0.0
+channel -incremental 1 1 1.0
+channel -incremental 1 2 2.0
+channel -incremental 1 3 3.0
+channel -incremental 1 4 4.0
+channel -incremental 1 5 5.0
+channel -incremental 1 6 6.0
+channel -incremental 1 7 7.0
+channel -incremental 1 8 8.0
+channel -incremental 1 9 9.0
+channel -incremental 1 10 10.0
+channel -incremental 1 11 11.0
+channel -incremental 1 12 12.0
+channel -incremental 1 13 13.0
+channel -incremental 1 14 14.0
+channel -incremental 1 15 15.0
+
+channel -incremental 1 0m 16.0
+channel -incremental 1 1m 17.0
+channel -incremental 1 2m 18.0
+channel -incremental 1 3m 19.0
+channel -incremental 1 4m 20.0
+channel -incremental 1 5m 21.0
+channel -incremental 1 6m 22.0
+channel -incremental 1 7m 23.0
+channel -incremental 1 8m 24.0
+channel -incremental 1 9m 25.0
+channel -incremental 1 10m 26.0
+channel -incremental 1 11m 27.0
+channel -incremental 1 12m 28.0
+channel -incremental 1 13m 29.0
+channel -incremental 1 14m 30.0
+channel -incremental 1 15m 31.0
+
+channel -incremental 1 16 32.0
+channel -incremental 1 17 33.0
+channel -incremental 1 18 34.0
+channel -incremental 1 19 35.0
+channel -incremental 1 20 36.0
+channel -incremental 1 21 37.0
+channel -incremental 1 22 38.0
+channel -incremental 1 23 39.0
+channel -incremental 1 24 40.0
+channel -incremental 1 25 41.0
+channel -incremental 1 26 42.0
+channel -incremental 1 27 43.0
+channel -incremental 1 28 44.0
+channel -incremental 1 29 45.0
+channel -incremental 1 30 46.0
+channel -incremental 1 31 47.0
+
+channel -incremental 1 16m 48.0
+channel -incremental 1 17m 49.0
+channel -incremental 1 18m 50.0
+channel -incremental 1 19m 51.0
+channel -incremental 1 20m 52.0
+channel -incremental 1 21m 53.0
+channel -incremental 1 22m 54.0
+channel -incremental 1 23m 55.0
+channel -incremental 1 24m 56.0
+channel -incremental 1 25m 57.0
+channel -incremental 1 26m 58.0
+channel -incremental 1 27m 59.0
+channel -incremental 1 28m 60.0
+channel -incremental 1 29m 61.0
+channel -incremental 1 30m 62.0
+channel -incremental 1 31m 63.0
+
+
+page scalers Counts
+
+display_single scalers 0
+display_single scalers 1
+display_single scalers 2
+display_single scalers 3
+display_single scalers 4
+display_single scalers 5
+display_single scalers 6
+display_single scalers 7
+display_single scalers 8
+display_single scalers 9
+display_single scalers 10
+display_single scalers 11
+display_single scalers 12
+display_single scalers 13
+display_single scalers 14
+display_single scalers 15
+
+display_single scalers 0m
+display_single scalers 1m
+display_single scalers 2m
+display_single scalers 3m
+display_single scalers 4m
+display_single scalers 5m
+display_single scalers 6m
+display_single scalers 7m
+display_single scalers 8m
+display_single scalers 9m
+display_single scalers 10m
+display_single scalers 11m
+display_single scalers 12m
+display_single scalers 13m
+display_single scalers 14m
+display_single scalers 15m
+
+page scalers2 Counts
+
+
+display_single scalers2 16
+display_single scalers2 17
+display_single scalers2 18
+display_single scalers2 19
+display_single scalers2 20
+display_single scalers2 21
+display_single scalers2 22
+display_single scalers2 23
+display_single scalers2 24
+display_single scalers2 25
+display_single scalers2 26
+display_single scalers2 27
+display_single scalers2 28
+display_single scalers2 29
+display_single scalers2 30
+display_single scalers2 31
+
+
+display_single scalers2 16m
+display_single scalers2 17m
+display_single scalers2 18m
+display_single scalers2 19m
+display_single scalers2 20m
+display_single scalers2 21m
+display_single scalers2 22m
+display_single scalers2 23m
+display_single scalers2 24m
+display_single scalers2 25m
+display_single scalers2 26m
+display_single scalers2 27m
+display_single scalers2 28m
+display_single scalers2 29m
+display_single scalers2 30m
+display_single scalers2 31m

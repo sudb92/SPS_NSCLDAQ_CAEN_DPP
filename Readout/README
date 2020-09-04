@@ -1,0 +1,41 @@
+WARNING: There is no global makefile implemented for the entire project!
+Remember to keep ../DPP-PHA and ../DPP-PSD compiled and up to date before attempting to run 'make' on this folder's contents.
+
+Sudarsan B
+sbalak2@lsu.edu
+2 Sep 2020
+
+
+Structure of Readout Skeleton
+-------------------------------
+
+	+ Eventsegments for PHA belong to class CompassEventSegment. Create one object per PHA board for these.
+	+ Eventsegments for PSD belong to class CDPpPsdEventSegment, one object needs to be instantiated per PSD board. 
+	+ The eventsegments find the matching LINK, NODE boards from the XML file specified
+	+ As of now, there's no explicit checking performed to ensure PSD segments don't accidentally get 
+	  asked to read from XML contents with PHA - this is being worked on
+	+ EventSegments 'check for trigger' by attempting a MBLT transfer from the board 
+	+ Since we need this check to be performed in an optimal fashion so as to not let boards pile up data, we require CPsdCompoundEventSegments(PSD) or CompassMultiModuleEventSegment(PHA)
+	+ The digitizers can be grouped into CompoundEventSegments sensibly to ensure triggers are looked at frequently enough between boards. COneOnlyEventSegment ensures fair polling on the CompoundEventSegment triggers.
+	+ Similarly, the trigger logic is setup individually for each of PSD and PHA segments, and then combined to a master CCompoundTrigger.
+
+ScalerDisplay
+-------------
+	+ Presently, the trigger count increment is hard coded as 128 into the definitions of EventSegment classes
+	+ If the increment size needs adjustment, the correct hex numbers need to be written to the boards at the right register address
+	+ The Scaler classes poll public members that store triggers counted/missed in each EventSegment class
+
+Testing
+-------
+	+ A typical test routine to be followed when starting out using the Readout framework would be
+		 - Run Compass and adjust parameters until optimum conditions are obtained
+		 - Setup the Skeleton appropriately in NSCLDAQ
+		 - Store register dumps from all PHA/PSD boards immediately after a short Compass run. The shell scripts cdump.sh is a handy test case
+		 - Run NSCLDAQ Readout from either a terminal or using ReadoutShell
+		 - Generate register dumps again (see nscldump.sh for a handy test case)
+		 - Compare the register dumps and ensure they're not different in any unexpected places. The two should be near identical except for additional settings we've forced on nscldaq, such as a different increment for scalers
+	+ Use XML Tweaker to perform any runtime adjustments to parameters. 
+
+TODO: It may be necessary to restart the readout program (exit and start again) for changes to take effect. This is another issue in need of fixing.
+
+

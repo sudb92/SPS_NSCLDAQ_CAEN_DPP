@@ -1,0 +1,380 @@
+Record-Length 1020
+  Ch 0 : 80
+  Ch 1 : 80
+  Ch 2 : 80
+  Ch 3 : 80
+  Ch 4 : 80
+  Ch 5 : 80
+  Ch 6 : 80
+  Ch 7 : 80
+  Ch 8 : 80
+  Ch 9 : 80
+  Ch 10 : 80
+  Ch 11 : 80
+  Ch 12 : 80
+  Ch 13 : 80
+  Ch 14 : 80
+  Ch 15 : 80
+Dynamic-range 1028
+  Ch 0 : 0
+  Ch 1 : 0
+  Ch 2 : 0
+  Ch 3 : 0
+  Ch 4 : 0
+  Ch 5 : 0
+  Ch 6 : 0
+  Ch 7 : 0
+  Ch 8 : 0
+  Ch 9 : 0
+  Ch 10 : 0
+  Ch 11 : 0
+  Ch 12 : 0
+  Ch 13 : 0
+  Ch 14 : 0
+  Ch 15 : 0
+Evts/aggregate 1034
+  Ch 0 : 1
+  Ch 1 : 1
+  Ch 2 : 1
+  Ch 3 : 1
+  Ch 4 : 1
+  Ch 5 : 1
+  Ch 6 : 1
+  Ch 7 : 1
+  Ch 8 : 1
+  Ch 9 : 1
+  Ch 10 : 1
+  Ch 11 : 1
+  Ch 12 : 1
+  Ch 13 : 1
+  Ch 14 : 1
+  Ch 15 : 1
+Pre-trigger 1038
+  Ch 0 : 10
+  Ch 1 : 10
+  Ch 2 : 10
+  Ch 3 : 10
+  Ch 4 : 10
+  Ch 5 : 10
+  Ch 6 : 10
+  Ch 7 : 10
+  Ch 8 : 10
+  Ch 9 : 10
+  Ch 10 : 10
+  Ch 11 : 10
+  Ch 12 : 10
+  Ch 13 : 10
+  Ch 14 : 10
+  Ch 15 : 10
+CFD-Settings 103c
+  Ch 0 : 10
+  Ch 1 : 10
+  Ch 2 : 10
+  Ch 3 : 10
+  Ch 4 : 10
+  Ch 5 : 10
+  Ch 6 : 10
+  Ch 7 : 10
+  Ch 8 : 10
+  Ch 9 : 10
+  Ch 10 : 10
+  Ch 11 : 10
+  Ch 12 : 10
+  Ch 13 : 10
+  Ch 14 : 10
+  Ch 15 : 10
+Q-zero-supression-Thrshold 1044
+  Ch 0 : 10070f1
+  Ch 1 : 10070f1
+  Ch 2 : 10070f1
+  Ch 3 : 10070f1
+  Ch 4 : 10070f1
+  Ch 5 : 10070f1
+  Ch 6 : 10070f1
+  Ch 7 : 10070f1
+  Ch 8 : 10070f1
+  Ch 9 : 10070f1
+  Ch 10 : 10070f1
+  Ch 11 : 10070f1
+  Ch 12 : 10070f1
+  Ch 13 : 10070f1
+  Ch 14 : 10070f1
+  Ch 15 : 10070f1
+Short-Gate-width 1054
+  Ch 0 : 10
+  Ch 1 : 10
+  Ch 2 : 10
+  Ch 3 : 10
+  Ch 4 : 10
+  Ch 5 : 10
+  Ch 6 : 10
+  Ch 7 : 10
+  Ch 8 : 10
+  Ch 9 : 10
+  Ch 10 : 10
+  Ch 11 : 10
+  Ch 12 : 10
+  Ch 13 : 10
+  Ch 14 : 10
+  Ch 15 : 10
+Long-Gate-width 1058
+  Ch 0 : a
+  Ch 1 : a
+  Ch 2 : a
+  Ch 3 : a
+  Ch 4 : a
+  Ch 5 : a
+  Ch 6 : a
+  Ch 7 : a
+  Ch 8 : a
+  Ch 9 : a
+  Ch 10 : a
+  Ch 11 : a
+  Ch 12 : a
+  Ch 13 : a
+  Ch 14 : a
+  Ch 15 : a
+Gate-Offset 105c
+  Ch 0 : c8
+  Ch 1 : c8
+  Ch 2 : c8
+  Ch 3 : c8
+  Ch 4 : c8
+  Ch 5 : c8
+  Ch 6 : c8
+  Ch 7 : c8
+  Ch 8 : c8
+  Ch 9 : c8
+  Ch 10 : c8
+  Ch 11 : c8
+  Ch 12 : c8
+  Ch 13 : c8
+  Ch 14 : c8
+  Ch 15 : c8
+Trigger-thresh 1060
+  Ch 0 : 32
+  Ch 1 : 32
+  Ch 2 : 32
+  Ch 3 : 32
+  Ch 4 : 32
+  Ch 5 : 32
+  Ch 6 : 32
+  Ch 7 : 32
+  Ch 8 : 32
+  Ch 9 : 32
+  Ch 10 : 32
+  Ch 11 : 32
+  Ch 12 : 32
+  Ch 13 : 32
+  Ch 14 : 32
+  Ch 15 : 32
+Fixed-bline 1064
+  Ch 0 : 1e
+  Ch 1 : 1e
+  Ch 2 : 1e
+  Ch 3 : 1e
+  Ch 4 : 1e
+  Ch 5 : 1e
+  Ch 6 : 1e
+  Ch 7 : 1e
+  Ch 8 : 1e
+  Ch 9 : 1e
+  Ch 10 : 1e
+  Ch 11 : 1e
+  Ch 12 : 1e
+  Ch 13 : 1e
+  Ch 14 : 1e
+  Ch 15 : 1e
+Shaped-trig-wid 1070
+  Ch 0 : 0
+  Ch 1 : 0
+  Ch 2 : 0
+  Ch 3 : 0
+  Ch 4 : 0
+  Ch 5 : 0
+  Ch 6 : 0
+  Ch 7 : 0
+  Ch 8 : 0
+  Ch 9 : 0
+  Ch 10 : 0
+  Ch 11 : 0
+  Ch 12 : 0
+  Ch 13 : 0
+  Ch 14 : 0
+  Ch 15 : 0
+Trg-Holdoff-wid 1074
+  Ch 0 : a
+  Ch 1 : a
+  Ch 2 : a
+  Ch 3 : a
+  Ch 4 : a
+  Ch 5 : a
+  Ch 6 : a
+  Ch 7 : a
+  Ch 8 : a
+  Ch 9 : a
+  Ch 10 : a
+  Ch 11 : a
+  Ch 12 : a
+  Ch 13 : a
+  Ch 14 : a
+  Ch 15 : a
+PSD-Cut-thresh 1078
+  Ch 0 : 8
+  Ch 1 : 8
+  Ch 2 : 8
+  Ch 3 : 8
+  Ch 4 : 8
+  Ch 5 : 8
+  Ch 6 : 8
+  Ch 7 : 8
+  Ch 8 : 8
+  Ch 9 : 8
+  Ch 10 : 8
+  Ch 11 : 8
+  Ch 12 : 8
+  Ch 13 : 8
+  Ch 14 : 8
+  Ch 15 : 8
+PUR-GAP-thresh 107c
+  Ch 0 : a
+  Ch 1 : a
+  Ch 2 : a
+  Ch 3 : a
+  Ch 4 : a
+  Ch 5 : a
+  Ch 6 : a
+  Ch 7 : a
+  Ch 8 : a
+  Ch 9 : a
+  Ch 10 : a
+  Ch 11 : a
+  Ch 12 : a
+  Ch 13 : a
+  Ch 14 : a
+  Ch 15 : a
+DPP-Algo-control 1080
+  Ch 0 : 0
+  Ch 1 : 0
+  Ch 2 : 0
+  Ch 3 : 0
+  Ch 4 : 0
+  Ch 5 : 0
+  Ch 6 : 0
+  Ch 7 : 0
+  Ch 8 : 0
+  Ch 9 : 0
+  Ch 10 : 0
+  Ch 11 : 0
+  Ch 12 : 0
+  Ch 13 : 0
+  Ch 14 : 0
+  Ch 15 : 0
+DPP-Algo-ctrl-2 1084
+  Ch 0 : a
+  Ch 1 : a
+  Ch 2 : a
+  Ch 3 : a
+  Ch 4 : a
+  Ch 5 : a
+  Ch 6 : a
+  Ch 7 : a
+  Ch 8 : a
+  Ch 9 : a
+  Ch 10 : a
+  Ch 11 : a
+  Ch 12 : a
+  Ch 13 : a
+  Ch 14 : a
+  Ch 15 : a
+Channel-status 1088
+  Ch 0 : fa
+  Ch 1 : fa
+  Ch 2 : fa
+  Ch 3 : fa
+  Ch 4 : fa
+  Ch 5 : fa
+  Ch 6 : fa
+  Ch 7 : fa
+  Ch 8 : fa
+  Ch 9 : fa
+  Ch 10 : fa
+  Ch 11 : fa
+  Ch 12 : fa
+  Ch 13 : fa
+  Ch 14 : fa
+  Ch 15 : fa
+DC-Offset 1098
+  Ch 0 : 8000
+  Ch 1 : 8000
+  Ch 2 : 8000
+  Ch 3 : 8000
+  Ch 4 : 8000
+  Ch 5 : 8000
+  Ch 6 : 8000
+  Ch 7 : 8000
+  Ch 8 : 8000
+  Ch 9 : 8000
+  Ch 10 : 8000
+  Ch 11 : 8000
+  Ch 12 : 8000
+  Ch 13 : 8000
+  Ch 14 : 8000
+  Ch 15 : 8000
+Veto-width 10d4
+  Ch 0 : a
+  Ch 1 : a
+  Ch 2 : a
+  Ch 3 : a
+  Ch 4 : a
+  Ch 5 : a
+  Ch 6 : a
+  Ch 7 : a
+  Ch 8 : a
+  Ch 9 : a
+  Ch 10 : a
+  Ch 11 : a
+  Ch 12 : a
+  Ch 13 : a
+  Ch 14 : a
+  Ch 15 : a
+Board-Config 8000
+  Ch 0 : 110
+Aggregate-org 800c
+  Ch 0 : a
+Acquisition-ctrl 8100
+  Ch 0 : 0
+Global-trg-mask 810c
+  Ch 0 : c0000000
+FP-GPO-TRG-ena-mask 8110
+  Ch 0 : 80000000
+FP-IO-Control 811c
+  Ch 0 : 0
+Ch-enables 8120
+  Ch 0 : ff
+Analog-monitor 8144
+  Ch 0 : 0
+Start/stop-delay 8170
+  Ch 0 : 0
+ExtTrgDisable 817c
+  Ch 0 : 0
+Trg-Validation-01 8180
+  Ch 0 : 20000000
+Trg-Valiation-23 8184
+  Ch 0 : 20000000
+Trg-Valiation-45 8188
+  Ch 0 : 20000000
+Trg-Validation-67 818c
+  Ch 0 : 20000000
+Trg-Validation-89 8190
+  Ch 0 : 20000000
+Trg-Validation-ab 8194
+  Ch 0 : 20000000
+Trg-Validation-cd 8198
+  Ch 0 : 20000000
+Trg-Validation-ef 819c
+  Ch 0 : 20000000
+FP-LVDS-New-Featurs 81a0
+  Ch 0 : 0
+Agregates-per-blt ef1c
+  Ch 0 : 1
