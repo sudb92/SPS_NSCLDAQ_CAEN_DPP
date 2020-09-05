@@ -16,12 +16,13 @@
 */
 
 /** @file:  CPSDFragmentHandler.cpp
- *  @brief: Implement the fragment handler for s800 data.
+ *  @brief: Implement the fragment handler for PSD data.
  */
+/* Adapted for DPP-PHA/PSD by Sudarsan B
+ sbalak2@lsu.edu, Aug-Sep 2020 */
 
 #include "CPSDFragmentHandler.h"
 #include "FragmentIndex.h"
-//#include "PacketUtils.h"
 #include <string>
 #include <stdexcept>
 
@@ -30,6 +31,7 @@
 CPSDFragmentHandler::CPSDFragmentHandler()
 {
 }
+
 void CPSDFragmentHandler::printEvent(FragmentInfo& frag)
 {
 	std::uint16_t* p = frag.s_itembody;
@@ -52,12 +54,10 @@ CPSDFragmentHandler::operator()(FragmentInfo& frag)
    std::uint16_t* p = frag.s_itembody;
 
    auto end = p+*p;
-  //std::cout << "\t"<<frag.s_sourceId;
   uint16_t temp1, temp2, temp3, temp4; //Temporary words to store data
   uint32_t Energy, channelNum; //Temporary variables to be made into a std::pair for ease-of-access by CRawUnpacker.cpp
 
   auto iter = p; //Start with parsing      
-  //iter = iter+12;        
   if (iter<end) {
 	temp1 = *iter++;
 	temp1 = *iter++;
@@ -65,7 +65,6 @@ CPSDFragmentHandler::operator()(FragmentInfo& frag)
 	temp1 = *iter++; //Will be 0011 typically - the size of event	
 	temp2 = *iter++; //Will be 0000 - the padded zeros usually
 	event.size = temp1+0x10000*temp2; //Store it in the size variable
-
 
 	temp1 = *iter++; //Time stamp bits 0-3
 	temp2 = *iter++; // TS 4-7

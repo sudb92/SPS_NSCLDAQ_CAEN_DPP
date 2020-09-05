@@ -18,11 +18,11 @@
 /** @file:  CPHAFragmentHandler.cpp
  *  @brief: Implement the fragment handler for s800 data.
  */
+/* Adapted for DPP-PHA/PSD by Sudarsan B
+ sbalak2@lsu.edu, Aug-Sep 2020 */
 
 #include "CPHAFragmentHandler.h"
 #include "FragmentIndex.h"
-//#include "PacketUtils.h"
-
 #include <iostream>
 #include <string>
 #include <stdexcept>

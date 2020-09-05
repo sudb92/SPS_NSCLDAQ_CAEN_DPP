@@ -18,6 +18,8 @@
 /** @file:  CMyEndOfEventHandler.cpp
  *  @brief: Implementation of the end of event handler.
  */
+/* Adapted for DPP-PHA/PSD by Sudarsan B
+ sbalak2@lsu.edu, Aug-Sep 2020 */
 
 #include "CMyEndOfEventHandler.h"
 #include <CRingItem.h>

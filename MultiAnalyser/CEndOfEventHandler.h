@@ -18,6 +18,8 @@
 /** @file:  CEndOfEventHandler.h
  *  @brief: Provide an abstract base class that defines the interface for end handlers.
  */
+/* Adapted for DPP-PHA/PSD by Sudarsan B
+ sbalak2@lsu.edu, Aug-Sep 2020 */
 
 #ifndef CENDOFEVENTHANDLER_H
 #define CENDOFEVENTHANDLER_H

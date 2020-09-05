@@ -18,6 +18,9 @@
 /** @file:  CRingItemDecoder.cpp 
  *  @brief: Implement the CRingItemDecoder class.
  */
+/* Adapted for DPP-PHA/PSD by Sudarsan B
+ sbalak2@lsu.edu, Aug-Sep 2020 */
+
 
 #include "CRingItemDecoder.h"
 

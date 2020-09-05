@@ -18,7 +18,8 @@
 /** @file:  Main.cpp
  *  @brief: Main program to read data from a ring data source,.
  */
-
+/* Adapted for DPP-PHA/PSD by Sudarsan B
+ sbalak2@lsu.edu, Aug-Sep 2020 */
 /**
     What this template does:  The main program can analyze data from either an
     online data source or from file.
@@ -79,12 +80,11 @@
 
 
 #include "CRingItemDecoder.h"              // Sample code.
-#include "CPHAFragmentHandler.h"          // Handle s800 fragments.
-#include "CPSDFragmentHandler.h"        // Handle CAESAR fragments.
+#include "CPHAFragmentHandler.h"          // Handle PHA fragments.
+#include "CPSDFragmentHandler.h"        // Handle PSD fragments.
 #include "CMyEndOfEventHandler.h"          // Handle end of event processing.
     
 // Includes that are standard c++ things:
-
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
@@ -93,7 +93,6 @@
 #include <errno.h>
 
 /* Note that not all errno.h's define ESUCCESS so:  */
-
 #ifndef ESUCCESS
 #define ESUCCESS 0
 #endif
@@ -139,9 +138,6 @@ main(int argc, char**argv)
     std::string uri(argv[1]);
     std::string mode(argv[2]);
 
-
-   // ModeEnum runMode;
-    
     std::vector<uint16_t> sample = {PHYSICS_EVENT};   // means nothing from file.
     std::vector<uint16_t> exclude;                    // get all ring item types:
     
@@ -161,7 +157,7 @@ main(int argc, char**argv)
     CPHAFragmentHandler phahandler;
     CMyEndOfEventHandler     endhandler;
     
-    decoder.registerFragmentHandler(62, &psdhandler);
+    decoder.registerFragmentHandler(62, &psdhandler); //The size differentiates PHA and PSD fragments
     decoder.registerFragmentHandler(58, &phahandler);
     decoder.registerEndHandler(&endhandler);
     decoder.setOutputMode(mode);

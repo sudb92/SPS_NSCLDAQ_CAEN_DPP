@@ -16,12 +16,13 @@
 */
 
 /** @file:  CPSDFragmentHandler.cpp
- *  @brief: Implement the fragment handler for s800 data.
+ *  @brief: Implement the fragment handler for PSD data.
  */
+/* Adapted for DPP-PHA/PSD by Sudarsan B
+ sbalak2@lsu.edu, Aug-Sep 2020 */
 
 #include "CPSDFragmentHandler.h"
 #include "FragmentIndex.h"
-//#include "PacketUtils.h"
 #include <string>
 #include <stdexcept>
 

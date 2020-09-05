@@ -18,6 +18,8 @@
 /** @file:  CPHAFragmentHandler.h
  *  @brief: Define the class that handles PHA fragments arising from PHA digitizers.
  */
+/* Adapted for DPP-PHA/PSD by Sudarsan B
+ sbalak2@lsu.edu, Aug-Sep 2020 */
 
 #ifndef CPHAFRAGMENTHANDLER_H
 #define CPHAFRAGMENTHANDLER_H

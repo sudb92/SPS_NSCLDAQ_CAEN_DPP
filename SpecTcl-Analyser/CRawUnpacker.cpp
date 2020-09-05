@@ -11,7 +11,6 @@ sbalak2@lsu.edu
 */
 
 #include "CRawUnpacker.h"
-
 #include <BufferDecoder.h>
 #include <TCLAnalyzer.h>
 #include <iostream>
@@ -29,8 +28,8 @@ sbalak2@lsu.edu
 
 //Constructor with initialization list
 CRawUnpacker::CRawUnpacker()
-  : m_values("PSD_PHA_e",16384,0.0,16383.0,"channels",32,0),
-    m_timestamps("PSD_PHA_ts",0.0,"ns",32,0)
+  : m_values("PSD_PHA_e",16384,0.0,16383.0,"channels",64,0),
+    m_timestamps("PSD_PHA_ts",0.0,"ns",64,0)
 
 //Tree called "PSD_PHA_e", has 16+16 channels as branches, each storing an ADC output value in the range 0-16383. Channels 0-15 are from the PSD board, 16-31 are PHA.
 //"PSD_PHA_ts" stores timestamps of all events w.r.t channel 13 of the PSD board, which could (say) stand for the scints in an expt

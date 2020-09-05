@@ -18,6 +18,8 @@
 /** @file:  CPSDFragmentHandler.h
  *  @brief: Define the class that handles DPP-PSD fragments from CAEN Digitizers.
  */
+/* Adapted for DPP-PHA/PSD by Sudarsan B
+ sbalak2@lsu.edu, Aug-Sep 2020 */
 
 #ifndef CPSDFRAGMENTHANDLER_H
 #define CPSDFRAGMENTHANDLER_H

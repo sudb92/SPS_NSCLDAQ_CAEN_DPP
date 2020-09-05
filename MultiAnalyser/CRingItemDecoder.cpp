@@ -19,6 +19,9 @@
  *  @brief: Implement the CRingItemDecoder class.
  */
 
+/* Adapted for DPP-PHA/PSD by Sudarsan B
+ sbalak2@lsu.edu, Aug-Sep 2020 */
+
 #include "CRingItemDecoder.h"
 
 /**
@@ -93,8 +96,7 @@ std::vector<DppEvent>
 CRingItemDecoder::operator()(CRingItem* pItem)
 {
     std::uint32_t itemType = pItem->type();
-    CRingItem* pActualItem = CRingItemFactory::createRingItem(*pItem);
-    
+    CRingItem* pActualItem = CRingItemFactory::createRingItem(*pItem);    
     if (itemType == PHYSICS_EVENT) {
         CPhysicsEventItem* pPhysics = dynamic_cast<CPhysicsEventItem*>(pActualItem);
         if (!pPhysics) {
@@ -118,7 +120,7 @@ CRingItemDecoder::operator()(CRingItem* pItem)
  *
  *  Note:  A warning messgae is emitted, and the fragment is not processed
  *         if it has no body header.
- *
+ *  Either returns a vector holding all DppEvents within one Eventbuilder bunch, or a zero vector.
  *   @param pItem - pointer to the physics even item  object.
  */
 std::vector<DppEvent>
@@ -148,12 +150,11 @@ CRingItemDecoder::decodePhysicsEvent(CPhysicsEventItem* pItem)
     
     for (size_t i = 0; i < nFrags; i++) {
         FragmentInfo f = iterator.getFragment(i);
-        //std::cout << "\nns_size:" << f.s_size << " sid:" << f.s_sourceId;  
         CDppFragmentHandler *h = dynamic_cast<CDppFragmentHandler*>(m_fragmentHandlers[f.s_size]);
         if (h)
 	{
 	  (*h)(f); // Invoke the fragment handler if it exists.
-	  events.push_back(h->getEvent());
+	  events.push_back(h->getEvent()); // 'events' taken together will represent one coincident bunch of events
 	  if(runMode == DUMP)
 		  h->printEvent();
 	}
@@ -163,7 +164,7 @@ CRingItemDecoder::decodePhysicsEvent(CPhysicsEventItem* pItem)
     // Invoke any end of event handler:
     
     if (m_endHandler && runMode == DUMP) (*m_endHandler)(pItem);
-   return events;
+   return events;  //Is parseable at a later stage
 }
 
 /**

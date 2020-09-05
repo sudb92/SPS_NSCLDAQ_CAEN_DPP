@@ -19,6 +19,9 @@
  *  @brief: define the class that implements the analysis specific end of
  *          event handler.
  */
+/* Adapted for DPP-PHA/PSD by Sudarsan B
+ sbalak2@lsu.edu, Aug-Sep 2020 */
+
 #ifndef CMYENDOFEVENTHANDLER_H
 #define CMYENDOFEVENTHANDLER_H
 

@@ -18,6 +18,8 @@
 /** @file:  CFragmentHandler.h
  *  @brief: Abstract base class that defines fragment handler mandatory interface.
  */
+/* Adapted for DPP-PHA/PSD by Sudarsan B
+ sbalak2@lsu.edu, Aug-Sep 2020 */
 
 #ifndef CDPPFRAGMENTHANDLER_H
 #define CDPPFRAGMENTHANDLER_H
