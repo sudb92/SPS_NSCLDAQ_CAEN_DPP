@@ -47,8 +47,8 @@
 ------------------------
 
 + Parses unbuilt DPP ringbuffer data to either print a formatted stream to the console, or save it into a ROOT tree
-+ Format: ./Analyser <file/ringname> <option>
-+ open: ROOT - save to root tree, DUMP - print to screen
++ Format: ./Analyser <file/ringname> (option)
++ With (option): ROOT - save to root tree, DUMP - print to screen
 + Compass tree is saved with the naming template compass_run_x.root in the directory specified in evt2root_input.txt
 
 #### EvbRingAnalyser-DPP
