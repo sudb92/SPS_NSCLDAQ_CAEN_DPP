@@ -7,7 +7,8 @@
 	+ SpecTcl-Analyser
 	+ scalerDisplay
 	+ Readout
-	+ MultiAnalyser
+	+ RawDPPRingAnalyser-ROOT
+	+ EvbDPPRingAnalyser-ROOT
 * List of dependencies
 	+ nscldaq-11.4-009 (The version tested on)
 	+ spectcl-5.3-008
@@ -41,6 +42,20 @@
 + Readout updates counts in increments of 128, 1024 or 8192 events per channel
 + TODO: Edit readout to store time taken between N events, and use them to better estimate rates?
 + Run as ScalerDisplay scaler.def from terminal
+
+#### RawRingAnalyser-DPP
+------------------------
+
++ Parses unbuilt DPP ringbuffer data to either print a formatted stream to the console, or save it into a ROOT tree
++ Format: ./Analyser <file/ringname> <option>
++ open: ROOT - save to root tree, DUMP - print to screen
++ Compass tree is saved with the naming template compass_run_x.root in the directory specified in evt2root_input.txt
+
+#### EvbRingAnalyser-DPP
+------------------------
+
++ Parses eventbuilt DPP ringbuffer data, usage same as above
+
 
 #### Readout
 -------
