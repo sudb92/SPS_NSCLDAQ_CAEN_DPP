@@ -4,11 +4,11 @@
 * A collection of utilities that interface CAEN digitizers 1730/25 running DPP-PHA or DPP-PSD firmwares with NSCLDAQ
 * List of utilities
 	+ XML Editor
-	+ SpecTcl-Analyser
+	+ SpecTcl
 	+ scalerDisplay
 	+ Readout
-	+ RawDPPRingAnalyser-ROOT
-	+ EvbDPPRingAnalyser-ROOT
+	+ RawRingAnalyser-DPP
+	+ EvbRingAnalyser-DPP
 * List of dependencies
 	+ nscldaq-11.4-009 (The version tested on)
 	+ spectcl-5.3-008
@@ -16,6 +16,8 @@
 	+ CAENVMELib-2.41
 	+ CAENDigitizer_2.7.9 or CAENDigitizer_2.7.9
 	+ CAENComm-1.2
+	+ root v6.14.02 (version tested on)
+	+ CoMPASS v1.3.0
 
 ----------------------------------
 ### Brief description of utilities:
