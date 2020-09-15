@@ -1,0 +1,10 @@
+Sep 15 2020
+
+* Implement a channel-map within Parameters.cpp that automatically ID's FP/SABRE parameters in SpecTcl without recompiling
+* Fix scaler rate measurements. One Possible strategy is keeping track of dt between successive 1024's to arrive at the rate
+* Edit RingAnalysers to include structures that resemble RunCollector, to process multiple run-XXXX-XX.evt's at the same time
+* Test and verify fine-time-stamps in PSD are processed accurately
+* Verify all XML parameters are implemented accurately in the XML editor
+* Port FreeWrites capability to PSD from PHA
+* (In compass) analyse the role of the rate optimization parameter
+
