@@ -4,6 +4,8 @@ DAQDIR=/usr/opt/daq/11.4-009
 
 include $(INSTDIR)/etc/SpecTcl_Makefile.include
 
+DAQLIB = $(DAQDIR)/lib
+
 #  If you have any switches that need to be added to the default c++ compilation
 # rules, add them to the definition below:
 
@@ -16,7 +18,7 @@ USERCCFLAGS=$(USERCXXFLAGS)
 
 #  If you have any switches you need to add to the link add them below:
 
-USERLDFLAGS= 
+1
 CXXLDFLAGS= -L$(DAQLIB) -lFragmentIndex -ldataformat -ldaqio -lDataFlow -lurl -lException \
 	-Wl,"-rpath=$(DAQLIB)" -g
 #
