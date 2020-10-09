@@ -74,19 +74,19 @@ Bool_t Parameters::operator() (const Address_t pEvent,
 			      CAnalyzer& rAnalyzer,
                               CBufferDecoder& rDecoder)
 {
-  if(m_values[13].isValid() && m_values[20].isValid()) {
-    	dTFrontBack = double(m_timestamps[13] - m_timestamps[20]);	
+  if(m_values[29].isValid() && m_values[52].isValid()) {
+    	dTFrontBack = double(m_timestamps[29] - m_timestamps[52]);	
 //	dTFrontBack =static_cast<double>(m_timestamps[13]) -  static_cast<double>(m_timestamps[4]); 
 //     std::cout << "\n dT: " << dTFrontBack ;//<< " " << m_timestamps[13] << " " << m_timestamps[20] << std::endl;  
 //     std::cout << " PSD: " << m_timestamps[13] << std::endl;  
 
  }
 
- // if(m_values[20].isValid())
-   //  std::cout << " PHA: " << m_timestamps[20] << std::endl;  
-  //if(m_values[13].isValid())
-    // std::cout << " PSD: " << m_timestamps[13] << std::endl;  
-  
+//  if(m_values[52].isValid())
+  //   std::cout << " PHA: " << m_timestamps[52] << std::endl;  
+ // if(m_values[29].isValid())
+   //  std::cout << " PSD: " << m_timestamps[29] << std::endl;  
+   
  
   
   return kfTRUE;
