@@ -10,7 +10,7 @@
 	+ RawRingAnalyser-DPP
 	+ EvbRingAnalyser-DPP
 * List of dependencies
-	+ nscldaq-11.4-009 (The version tested on)
+	+ nscldaq-11.4-009, 11.3-019
 	+ spectcl-5.3-008
 	+ pugixml-1.8
 	+ CAENVMELib-2.41
