@@ -4,7 +4,7 @@ DAQDIR=/usr/opt/daq/11.4-009
 
 include $(INSTDIR)/etc/SpecTcl_Makefile.include
 
-DAQLIB = $(DAQDIR)/lib
+DAQLIB=$(DAQDIR)/lib
 
 #  If you have any switches that need to be added to the default c++ compilation
 # rules, add them to the definition below:
