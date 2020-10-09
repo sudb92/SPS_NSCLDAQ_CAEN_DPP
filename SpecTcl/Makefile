@@ -18,7 +18,6 @@ USERCCFLAGS=$(USERCXXFLAGS)
 
 #  If you have any switches you need to add to the link add them below:
 
-1
 CXXLDFLAGS= -L$(DAQLIB) -lFragmentIndex -ldataformat -ldaqio -lDataFlow -lurl -lException \
 	-Wl,"-rpath=$(DAQLIB)" -g
 #

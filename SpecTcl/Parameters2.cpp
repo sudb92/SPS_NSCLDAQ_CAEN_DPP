@@ -20,8 +20,8 @@ Changed adc1 to adc3 for post resoneut
 using namespace std;
 
 Parameters::Parameters() :
-    m_values("PSD_PHA_e",16384,0.0,16383.0,"channels",32,0),
-    m_timestamps("PSD_PHA_ts",0.0,"ns",32,0),
+    m_values("PSD_PHA_e",16384,0.0,16383.0,"channels",64,0),
+    m_timestamps("PSD_PHA_ts",0.0,"ns",64,0),
 /*  mtdc_values("tdc2", 65535,0.0, 65534.0, "channels", 32, 0),
   tdc_values("tdc1", 4096,0.0, 4095.0, "channels", 32, 0),
   adc3_values("adc3", 4096, 0.0, 4095.0, "channels", 32, 0),
