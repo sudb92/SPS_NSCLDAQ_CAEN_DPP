@@ -7,4 +7,6 @@ Sep 15 2020
 * Verify all XML parameters are implemented accurately in the XML editor
 * Port FreeWrites capability to PSD from PHA
 * (In compass) analyse the role of the rate optimization parameter
-
+* Add safety guards to XML parameter checking when they're changed back to their defaults
+* Get rid of Baseline holdoff in PHA regdump
+* 
