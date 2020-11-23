@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdexcept>
+#include <fstream>
 
 // Register offset definitions not in CAENDigitizerType.h:
 #define CFD_SETTINGS                 0x103c            // Per channel
@@ -61,12 +62,12 @@
  */
 CDPpPsdEventSegment::CDPpPsdEventSegment(
     PSDBoardParameters::LinkType linkType, int linkNum, int nodeNum,
-    int base, int sourceid, const char* configFile
+    int base, int sourceid, const char* configFile,  const char* pCheatFile
 ) :
     m_configFilename(configFile), m_pCurrentConfiguration(nullptr),
     m_linkType(linkType), m_linkNum(linkNum), m_nodeNumber(nodeNum),
     m_base(base), m_handle(-1), m_moduleName(""), m_serialNumber(-1),
-    m_nSourceId(sourceid), m_rawBuffer(nullptr), m_pWaveforms(nullptr)
+    m_nSourceId(sourceid), m_rawBuffer(nullptr), m_pWaveforms(nullptr), m_pCheatFile(pCheatFile)
 {
     for(int i =0; i < CAEN_DGTZ_MAX_CHANNEL; i++) {
         m_dppBuffer[i] = nullptr;
@@ -121,11 +122,18 @@ CDPpPsdEventSegment::initialize()
     }
     
     setupBoard();
+    
+    auto now = std::chrono::duration_cast<std::chrono::milliseconds>(
+			std::chrono::system_clock::now().time_since_epoch()
+			).count();
+
+
     for (int i=0; i<16; i++)
     {
 	  m_triggerCount[i]=0;
           m_missedTriggers[i]=0;
-          t[i] = clock();
+          t[i] = now;
+          tmiss[i] = now;
     }
 
 
@@ -679,7 +687,9 @@ CDPpPsdEventSegment::setupBoard()
 		temp |= 0x40050;
 
 	throwIfBadStatus(CAEN_DGTZ_WriteRegister(m_handle, 0x1084 | chSelect, temp),"Writing a channel algorithm control 2 register.");
-
+	temp = 0;
+	temp = m_pCurrentConfiguration->s_coincidenceTriggerOut/(m_nsPerTick*4);
+	throwIfBadStatus(CAEN_DGTZ_WriteRegister(m_handle, 0x1070 | chSelect, temp), "Writing shaped trigger width");
 
 	// End per channel settings.
     }
@@ -741,8 +751,7 @@ CDPpPsdEventSegment::setupBoard()
 		default:;
 	}
 
- 
-    
+   processCheatFile();
 
 }
 /**
@@ -1276,19 +1285,22 @@ CDPpPsdEventSegment::formatEvent(void* pBuffer, int chan)
      uint32_t temp = (pHit->Extras&0xf000)>>12;
 //     if(temp)
 	
-     /*temp has the structure: 0b(ABCD) with bit A = triger lost, B=over range (set when a trigger is lost or over range in a single event)*/
+     /*temp has the structure: 0b(ABCD) with bit A = trigger lost, B=over range (set when a trigger is lost or over range in a single event)*/
      /* C = set each time 128 triggers are counted, D is set each time 128 triggers are lost */
      if(temp&2)//
      {
-	m_triggerCount[chan] += 128.;//./(double(clock() - t[chan]));
-	t[chan] = clock();
+//	m_triggerCount[chan] += 128.;//./(double(clock() - t[chan]));
+//	t[chan] = clock();
+	auto now =    std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	m_triggerCount[chan] = static_cast<uint32_t>(128./((now-t[chan])*1.e-3));
+	t[chan] = now;
         //std::cout << "\n Extras:" << pHit->Extras << " 1024s:" << temp << " ft:" << (pHit->Extras&0x1ff) << " xt:" << ((pHit->Extras&0xffff0000) >>16);
      }
      if(temp&1)//
      {
-	m_missedTriggers[chan] += 128.;//./(double(clock() - t[chan]));
-	t[chan] = clock();
-        //std::cout << "\n Extras:" << pHit->Extras << " 1024s:" << temp << " ft:" << (pHit->Extras&0x1ff) << " xt:" << ((pHit->Extras&0xffff0000) >>16);
+	auto now =    std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	m_missedTriggers[chan] = static_cast<uint32_t>(128./((now-tmiss[chan])*1.e-3));
+	tmiss[chan] = now;
      }
 
     // Now the baselines and the Pileup rejection flag:
@@ -1730,4 +1742,107 @@ CDPpPsdEventSegment::setLVDSSIN()
   throwIfBadStatus(CAEN_DGTZ_WriteRegister(m_handle, 0x81a0, 0x1111), 
 		   "Unable to set LVDS output");
 
+}
+
+
+static std::string trim( std::string str )
+{
+    // remove trailing white space
+    while( !str.empty() && std::isspace( str.back() ) ) str.pop_back() ;
+
+    // return residue after leading white space
+    std::size_t pos = 0 ;
+    while( pos < str.size() && std::isspace( str[pos] ) ) ++pos ;
+    return str.substr(pos) ;
+}
+
+
+/**
+ * processCheatFile
+ *    Process the register cheat file.
+ *    If m_pCheatFile is nullptr, nothing is done.
+ *    Otherwise, the cheat file is opened and processed line by line.
+ *    The cheat file has the following format:
+ *    operation address value
+ *    Operation is one of
+ *       - . - set the value,
+ *       - # ignore the line (comment)
+ *       - | or the value into the register.
+ *       - * And the value into the registger
+ *       
+ *    address - is the address of the register to be modified.
+ *    value   - is the value that's either set or ored into the
+ *    register depending on the operation.
+ *    operation, addresss and value must  be separated by whitespace.
+ *    Lines with errors result in warnings but are ignored.
+ *    Borrowed from CAENPha.h implementation in DPP-PHA library
+ */
+void CDPpPsdEventSegment::processCheatFile()
+{
+  if (!m_pCheatFile) return;
+  std::ifstream infile(m_pCheatFile);
+  if (!infile) {
+    std::cerr << "Cheat file: " << m_pCheatFile << "could not be opened\n";
+    return;
+  }
+  while (!infile.eof()) {
+    std::string line;
+    std::getline(infile, line);
+    line = trim(line);              // Lose leading and trailing whitespace.
+    if (!line.empty()) {            // Ignore blank lines which are empty after trimming.
+      std::stringstream s(line);
+      char op;
+      std::string sAddr;
+      std::string sValue;
+      uint32_t  addr;
+      uint32_t  value;
+      op = '\0';
+      s >> op >> sAddr >> sValue;
+      
+      
+      if (s.fail())  {  // Note that I don't think the decode can fail going into strings...
+        std::cerr << "Warning: '" << line << "' was in error\n";
+        s.clear(std::ios_base::failbit);
+      } else {
+        
+        // What we do depends on the operation:
+        
+        // If the operation is not a comment, we can decode the address and
+        // value:
+        
+        if (op != '#')   {
+          addr  = strtoul(sAddr.c_str(), nullptr, 0);
+          value = strtoul(sValue.c_str(), nullptr, 0);
+        }
+        switch (op) {
+          case '#':                                    // comment.
+            break;
+          case '.':                                   // set:
+            {
+              CAEN_DGTZ_WriteRegister(m_handle, addr, value);
+            }
+            break;
+          case '|':                                 // bitwise or.
+            {
+              uint32_t currentValue;
+              CAEN_DGTZ_ReadRegister(m_handle, addr, &currentValue);
+              value |= currentValue;
+              CAEN_DGTZ_WriteRegister(m_handle, addr, value);
+            }
+            break;
+          case '*':                               // bitwise and.
+            {
+              uint32_t currentValue;
+              CAEN_DGTZ_ReadRegister(m_handle, addr, &currentValue);
+              value &= currentValue;
+              CAEN_DGTZ_WriteRegister(m_handle, addr, value);
+            }
+            break;
+          default:                               // unrecognized operation.
+            std::cerr << "Unrecognized operation in '" << line << "'\n";
+            break;
+        }
+      }
+    }
+  }
 }
