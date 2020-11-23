@@ -42,9 +42,9 @@
 #### ScalerDisplay
 -------------
 
-+ Readout updates counts in increments of 128, 1024 or 8192 events per channel
-+ TODO: Edit readout to store time taken between N events, and use them to better estimate rates?
-+ Run as ScalerDisplay scaler.def from terminal
++ Readout updates scaler counts to reflect the rate at which the last 128 triggers were recorded. 
++ Run as ScalerDisplay scaler-file.def from terminal. Two example .def files are included. One for the raw counted/missed trigger rates,
+the other providing the ratio of missed/counted in addition. 
 
 #### RawRingAnalyser-DPP
 ------------------------
