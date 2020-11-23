@@ -37,6 +37,7 @@
 + The unique size for PSD and PHA fragments is used by CRawUnpacker.cpp to distinguish them with 	CRingItemDecoder
 + TODO: PSD Fine timestamp lives in 'Extras'- Needs better implementation before testing with focalplane signals
 + Run as ./SpecTcl 
++ Needs tailoring per experiment
 
 #### ScalerDisplay
 -------------
@@ -64,3 +65,10 @@
 
 + Kindly refer to the README within the Readout folder
 
+#### Suggested run scheme
+---------
+
++ Use ReadoutShell with the correct eventbuilder settings. See sample ReadoutCallouts.tcl and .settings.tcl files in folder 'Evb+XML Files for testing'
++ Set wide eventbuilding windows (10000-50000 ns) at first, inspect the performance of the builder using Raw/EvbRingAnalyser-DPP instead of dumper
++ During runtime, if parameters are in need of changing, 'pause' the run and make edits with the XML Editor. If the XML source is saved
+with new data, unpausing the run loads the updated XML parameters automatically. Optimize all digitizer parameters before recording data in a run.
