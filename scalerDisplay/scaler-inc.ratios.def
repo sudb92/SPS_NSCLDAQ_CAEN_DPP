@@ -135,151 +135,80 @@ channel	-incremental	1	62m	126.0
 channel	-incremental	1	63m	127.0
 
 
-page scalers Counts
-
-display_single scalers 0
-display_single scalers 1
-display_single scalers 2
-display_single scalers 3
-display_single scalers 4
-display_single scalers 5
-display_single scalers 6
-display_single scalers 7
-display_single scalers 8
-display_single scalers 9
-display_single scalers 10
-display_single scalers 11
-display_single scalers 12
-display_single scalers 13
-display_single scalers 14
-display_single scalers 15
-
-display_single scalers 0m
-display_single scalers 1m
-display_single scalers 2m
-display_single scalers 3m
-display_single scalers 4m
-display_single scalers 5m
-display_single scalers 6m
-display_single scalers 7m
-display_single scalers 8m
-display_single scalers 9m
-display_single scalers 10m
-display_single scalers 11m
-display_single scalers 12m
-display_single scalers 13m
-display_single scalers 14m
-display_single scalers 15m
-
-page scalers2 Counts
-
-
-display_single scalers2 16
-display_single scalers2 17
-display_single scalers2 18
-display_single scalers2 19
-display_single scalers2 20
-display_single scalers2 21
-display_single scalers2 22
-display_single scalers2 23
-display_single scalers2 24
-display_single scalers2 25
-display_single scalers2 26
-display_single scalers2 27
-display_single scalers2 28
-display_single scalers2 29
-display_single scalers2 30
-display_single scalers2 31
-
-
-display_single scalers2 16m
-display_single scalers2 17m
-display_single scalers2 18m
-display_single scalers2 19m
-display_single scalers2 20m
-display_single scalers2 21m
-display_single scalers2 22m
-display_single scalers2 23m
-display_single scalers2 24m
-display_single scalers2 25m
-display_single scalers2 26m
-display_single scalers2 27m
-display_single scalers2 28m
-display_single scalers2 29m
-display_single scalers2 30m
-display_single scalers2 31m
-
-page scalers3 Counts
-
-display_single scalers3 32
-display_single scalers3 33
-display_single scalers3 34
-display_single scalers3 35
-display_single scalers3 36
-display_single scalers3 37
-display_single scalers3 38
-display_single scalers3 39
-display_single scalers3 40
-display_single scalers3 41
-display_single scalers3 42
-display_single scalers3 43
-display_single scalers3 44
-display_single scalers3 45
-display_single scalers3 46
-display_single scalers3 47
-
-
-display_single scalers3 32m
-display_single scalers3 33m
-display_single scalers3 34m
-display_single scalers3 35m
-display_single scalers3 36m
-display_single scalers3 37m
-display_single scalers3 38m
-display_single scalers3 39m
-display_single scalers3 40m
-display_single scalers3 41m
-display_single scalers3 42m
-display_single scalers3 43m
-display_single scalers3 44m
-display_single scalers3 45m
-display_single scalers3 46m
-display_single scalers3 47m
-
-page scalers4 Counts
-
-display_single	scalers4	48
-display_single	scalers4	49
-display_single	scalers4	50
-display_single	scalers4	51
-display_single	scalers4	52
-display_single	scalers4	53
-display_single	scalers4	54
-display_single	scalers4	55
-display_single	scalers4	56
-display_single	scalers4	57
-display_single	scalers4	58
-display_single	scalers4	59
-display_single	scalers4	60
-display_single	scalers4	61
-display_single	scalers4	62
-display_single	scalers4	63
-		
-display_single	scalers4	48m
-display_single	scalers4	49m
-display_single	scalers4	50m
-display_single	scalers4	51m
-display_single	scalers4	52m
-display_single	scalers4	53m
-display_single	scalers4	54m
-display_single	scalers4	55m
-display_single	scalers4	56m
-display_single	scalers4	57m
-display_single	scalers4	58m
-display_single	scalers4	59m
-display_single	scalers4	60m
-display_single	scalers4	61m
-display_single	scalers4	62m
-display_single	scalers4	63m
-
+page	scalers	Counts	
+			
+display_ratio	scalers	0m	0
+display_ratio	scalers	1m	1
+display_ratio	scalers	2m	2
+display_ratio	scalers	3m	3
+display_ratio	scalers	4m	4
+display_ratio	scalers	5m	5
+display_ratio	scalers	6m	6
+display_ratio	scalers	7m	7
+display_ratio	scalers	8m	8
+display_ratio	scalers	9m	9
+display_ratio	scalers	10m	10
+display_ratio	scalers	11m	11
+display_ratio	scalers	12m	12
+display_ratio	scalers	13m	13
+display_ratio	scalers	14m	14
+display_ratio	scalers	15m	15
+			
+page	scalers2	Counts	
+			
+			
+display_ratio	scalers2	16m	16
+display_ratio	scalers2	17m	17
+display_ratio	scalers2	18m	18
+display_ratio	scalers2	19m	19
+display_ratio	scalers2	20m	20
+display_ratio	scalers2	21m	21
+display_ratio	scalers2	22m	22
+display_ratio	scalers2	23m	23
+display_ratio	scalers2	24m	24
+display_ratio	scalers2	25m	25
+display_ratio	scalers2	26m	26
+display_ratio	scalers2	27m	27
+display_ratio	scalers2	28m	28
+display_ratio	scalers2	29m	29
+display_ratio	scalers2	30m	30
+display_ratio	scalers2	31m	31
+			
+page	scalers3	Counts	
+			
+display_ratio	scalers3	32m	32
+display_ratio	scalers3	33m	33
+display_ratio	scalers3	34m	34
+display_ratio	scalers3	35m	35
+display_ratio	scalers3	36m	36
+display_ratio	scalers3	37m	37
+display_ratio	scalers3	38m	38
+display_ratio	scalers3	39m	39
+display_ratio	scalers3	40m	40
+display_ratio	scalers3	41m	41
+display_ratio	scalers3	42m	42
+display_ratio	scalers3	43m	43
+display_ratio	scalers3	44m	44
+display_ratio	scalers3	45m	45
+display_ratio	scalers3	46m	46
+display_ratio	scalers3	47m	47
+			
+page	scalers4	Counts	
+			
+display_ratio	scalers4	48m	48
+display_ratio	scalers4	49m	49
+display_ratio	scalers4	50m	50
+display_ratio	scalers4	51m	51
+display_ratio	scalers4	52m	52
+display_ratio	scalers4	53m	53
+display_ratio	scalers4	54m	54
+display_ratio	scalers4	55m	55
+display_ratio	scalers4	56m	56
+display_ratio	scalers4	57m	57
+display_ratio	scalers4	58m	58
+display_ratio	scalers4	59m	59
+display_ratio	scalers4	60m	60
+display_ratio	scalers4	61m	61
+display_ratio	scalers4	62m	62
+display_ratio	scalers4	63m	63
 
