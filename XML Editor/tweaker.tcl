@@ -63,6 +63,7 @@ set commonBoardParameters [list                      \
     [list SRV_PARAM_START_MODE  {Start Mode} ]       \
     [list SRV_PARAM_COINC_MODE  {Coincidence mode}]  \
     [list SRV_PARAM_COINC_TRGOUT {Coincidence window} ] \
+    [list SRV_PARAM_CH_THRESHOLD {Global. Threshold} ] \
 ]
 
 set psdBoardParameters [list                         \
@@ -475,6 +476,37 @@ snit::type COMPASSdom {
         $self _markModified
     }
     ##
+    # destroyChannelDom
+    #    Destroys a template channel value entry for the specified
+    #    parmeter type.  This forces the value entry to fall back to defaults. 
+    #    What we need to do is delete an XML fragment node that contains
+    #    <entry>
+    #      <key>name</key>
+    #      <value> ...</value>
+    #    </entry>
+    #    for the right board, channel, name values
+    #
+    # @param board  - The board dom subtree.
+    # @param channel - The channel dom subtree into which we're inserting
+    # @param name    - name of the parameter.
+    # @return status - bool verifying process succeeded
+    # @retval ""     - No such parameter defined.
+    #
+    method destroyChannelDom {board channel name} {
+        set channelLvl [$self _getChannelDom $board $channel $name]
+        if {$channelLvl eq ""} {
+            return "";            # no such parameter defined.
+        }
+        #Destroy the fragment:
+	set dummy [$channelLvl delete]
+	#Reset it to reflect the default value
+        #set value [mymethod _getParamValue $board $name]
+	#puts $value
+        #set value [getReadableValueName $xml]
+        return 1
+    }
+
+    ##
     # getParamDescription
     #    Get a description of a parameter for board.
     #
@@ -669,6 +701,9 @@ snit::type COMPASSdom {
         }
         return $result
     }
+
+
+
     ##
     # _getParamValue
     #   Get the value of a parameter from the board <parameters>
@@ -765,6 +800,43 @@ snit::type COMPASSdom {
         
         return $value;                # The value dom node as promised.
     }
+
+    # _getChannelDom
+    #    Get the <entry> dom for a specific channel parameter. Sister function to _getChannelParamDom
+    #
+    # @param board - board node.
+    # @param name  - name for the parameter string.
+    # @param channel - channel # for which you need the parameter
+    # @return string - id of <entry> of the specified channel parameter.
+    # @retval ""   - no matching parameter name.
+    #
+    method _getChannelDom {board channelToSearch name} {
+        set result ""
+        set channels [$board getElementsByTagName channel]
+       	puts $name 
+	puts $channelToSearch
+	puts $board
+        foreach channel $channels {
+            set index [$channel getElementsByTagName index]
+            if {$channel eq $channelToSearch} {
+		set values [$channel getElementsByTagName values]
+		foreach value $values {
+		    set entries [$value getElementsByTagName entry]
+		    foreach entry $entries {
+		    	set key [$entry getElementsByTagName key]
+		    	set pname [[$key firstChild] nodeValue]
+		    	if {$pname eq $name} {
+			    puts $pname
+		    	    return $entry			
+		        }
+		    }
+		}
+            }
+        }
+    }
+
+
+
     ##
     # _findDescriptor
     #    Locate the _descriptor tag that's associated with a specific
@@ -1016,10 +1088,10 @@ snit::widgetadaptor NumericChannelControl {
     component units
     component title
     
-    option -dom -default ""     -readonly 1
-    option -board -default ""   -readonly 1
-    option -channel -default "" -readonly 1
-    option -name -default ""    -readonly 1
+    option -dom -default ""     -readonly 0
+    option -board -default ""   -readonly 0
+    option -channel -default "" -readonly 0
+    option -name -default ""    -readonly 0
     delegate option -text to title
     delegate method * to selector
     delegate option * to selector
@@ -1031,7 +1103,7 @@ snit::widgetadaptor NumericChannelControl {
         # fully configure the selector yet:
         
         install selector using \
-            ttk::spinbox $win.select -command [mymethod _onChange]
+            ttk::spinbox $win.select -command [mymethod _onChange] -validate focusout -validatecommand [mymethod _onChangeValidate]
         install units using ttk::label $win.units
         install title using ttk::label $win.title
         
@@ -1051,17 +1123,16 @@ snit::widgetadaptor NumericChannelControl {
             error "-name option is mandatory"
         }
         
-        
         # Fully configure the units and spinbox based on the
         # parameter description.
-        
+
         set info  [$options(-dom) getParamDescription \
             $options(-board)  $options(-name)]
         if {[dict get $info type] ne "numeric"} {
             error "$options(-name) is not a numeric parameter"
         }
         $selector configure -from [dict get $info minimum] \
-            -to [dict get $info maximum] -increment [dict get $info step]
+            -to [dict get $info maximum] -increment [dict get $info step] 
         $units configure -text [dict get $info units]
         
         $selector set [$options(-dom) getChannelValue \
@@ -1071,8 +1142,10 @@ snit::widgetadaptor NumericChannelControl {
         
         grid $selector $units $title -sticky w
         
+    }   
+    method _forcevalidate {} {
+	$selector validate
     }
-    
     
     #----------------------------- private methods ---------------------
     
@@ -1086,6 +1159,32 @@ snit::widgetadaptor NumericChannelControl {
         $options(-dom) setChannelValue \
             $options(-board) $options(-channel) $options(-name) $newValue
     }
+    method _onChangeValidate {} {
+        set newValue [$selector get]
+        puts $newValue	
+	if { $newValue ne "" } {
+        $options(-dom) setChannelValue \
+            $options(-board) $options(-channel) $options(-name) $newValue
+	} else {
+        set replacementValue [$options(-dom) destroyChannelDom \
+		$options(-board) $options(-channel) $options(-name)]
+	if {$replacementValue ne ""} { 
+		#Replace the per-channel value with the global Board level value if it's deleted
+            	$selector set [$options(-dom) getBoardValue \
+            	$options(-board) $options(-name)]
+	    }
+	#end of else part
+	}
+	return 1
+    }
+
+    #method _onChangeValidate {} {
+    #    set newValue [$selector get]
+    #    puts $newValue
+    #    $options(-dom) setChannelValue \
+    ##        $options(-board) $options(-channel) $options(-name) $newValue
+    #	return 1
+    #}
 }
 ##
 # createChannelControl
@@ -1673,7 +1772,7 @@ proc openXML {filename} {
 #   the XML.
 #
 proc offerSave {} {
-    set fname [$xmlFile getFilename]
+    set fname [$::xmlFile getFilename]
     set response [tk_messageBox                             \
         -title {Save modified file} -type yesno -icon question \
         -default yes -message "$fname has been modified Save?"
@@ -1753,8 +1852,7 @@ proc file->Save {} {
     $::title   saveFile
 }
 
-
-    
+ 
 
 
 ##
@@ -1785,15 +1883,26 @@ proc file->Open {} {
     #
     #  Prompt the file to read:
     #
-    
+    set InitialDir {}
+    set fname {./.config.cfg}
+    if {[file exists $fname]} {
+       set fp [open $fname r]
+       #upvar InitialDir InitialDirectory 
+       set InitialDir [gets $fp]
+       close $fp
+    }  else {
+	puts {"Error: Cannot find ./.config.cfg!"}
+    }
+    puts $InitialDir
     set filename [tk_getOpenFile                         \
         -title {Choose configuration file}               \
+	-initialdir $InitialDir			 \
         -filetypes {
             {{XML Files}  {.xml }                    }
             {{Configuration files}  {.config}        }
             {{Compass files}        {.compass}       }
             {{ All Files}           *                }
-        }                                                \
+        }
     ]
     if {$filename ne ""} {
         openXML $filename
@@ -1819,13 +1928,37 @@ proc file->Exit {} {
             offerSave
         }
     }
+    set fname {./.config.cfg};
+    set xmlFileName [$::xmlFile getFilename]
+    set xmlPath [join [lrange [split $xmlFileName "/"] 0 end-1] "/"]
+    if {$xmlFileName ne ""} {
+	    set fp [open $fname w]
+	    puts $fp $xmlPath
+	    close $fp
+    }
     exit 0
 }
+
+wm protocol . WM_DELETE_WINDOW {
+	file->Exit 
+   }
+
+
+
 ##
 # file->Quit
 #    Exit without offering to save.
 #
 proc file->Quit {} {
+
+    set fname {./.config.cfg}
+    set xmlFileName [$::xmlFile getFilename]
+    set xmlPath [join [lrange [split $xmlFileName "/"] 0 end-1] "/"]
+    if {$xmlFileName ne ""} {
+	    set fp [open $fname w]
+	    puts $fp $xmlPath
+	    close $fp
+    }
     exit 0
 }
 
