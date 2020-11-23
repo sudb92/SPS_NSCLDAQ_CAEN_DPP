@@ -82,7 +82,7 @@ CPSDFragmentHandler::operator()(FragmentInfo& frag)
 
 	temp1 = *iter++; //Channel number
 	//temp2 = *iter++; // Padded zeros
-	channelNum = temp1+16*frag.s_sourceId;//+0x10000*temp2; //Store channelnumber
+	channelNum = temp1;//+16*frag.s_sourceId;//+0x10000*temp2; //Store channelnumber
 
 
 	temp1 = *iter++; 
@@ -108,7 +108,7 @@ CPSDFragmentHandler::operator()(FragmentInfo& frag)
 
 	//Write the channel-number and data to the pair s_data
         event.s_data.first = channelNum;
-        event.s_data.second = Energy;
+        event.s_data.second = Energy&0x3FFF;
 
 
   } else {

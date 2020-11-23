@@ -42,7 +42,8 @@ CPHAFragmentHandler::CPHAFragmentHandler()
 void CPHAFragmentHandler::printEvent(FragmentInfo& frag)
 {
 	std::uint16_t* p = frag.s_itembody;
-	std::cout << "\npsdHead "<< *p;
+	if(event.s_data.second<1) return;
+	std::cout << "\nphaHead "<< *p;
 	std::cout << "\t" << event.size;
 	std::cout << "\t" << event.s_data.first;
 	std::cout << "\t" << event.timeStamp;
@@ -102,7 +103,7 @@ CPHAFragmentHandler::operator()(FragmentInfo& frag)
 
 	//Write the channel-number and data to the pair s_data
         event.s_data.first = channelNum;
-        event.s_data.second = Energy;
+        event.s_data.second = (Energy&0x3fff);
 
 	event.firmwareType = DppEvent::PHA;
   } else {

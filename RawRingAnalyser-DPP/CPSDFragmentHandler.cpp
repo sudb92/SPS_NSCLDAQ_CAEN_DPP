@@ -35,6 +35,7 @@ CPSDFragmentHandler::CPSDFragmentHandler()
 void CPSDFragmentHandler::printEvent(FragmentInfo& frag)
 {
 	std::uint16_t* p = frag.s_itembody;
+	if(event.EShort<1) return; //Don't dump zero events
 	std::cout << "\npsdHead "<< *p;
 	std::cout << "\t" << event.size;
 	std::cout << "\t" << event.s_data.first;
@@ -93,6 +94,7 @@ CPSDFragmentHandler::operator()(FragmentInfo& frag)
 	temp1 = *iter++; 
 	temp2 = *iter++; 
 	Energy = temp1+0x10000*temp2; //Store energy in temp variable
+	Energy = Energy&0x3fff;
 
 	temp1 = *iter++; 
 	temp2 = *iter++; 

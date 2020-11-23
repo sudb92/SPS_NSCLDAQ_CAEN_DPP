@@ -73,7 +73,7 @@ CPHAFragmentHandler::operator()(FragmentInfo& frag)
 	//std::cout << "\t" << event.size;
 	temp1 = *iter++; //Channel number
 	temp2 = *iter++; // Padded zeros
-	channelNum = temp1+0x10000*temp2  + 16*frag.s_sourceId; //Store channelnumber
+	channelNum = temp1+0x10000*temp2;//  + 16*frag.s_sourceId; //Store channelnumber
 	//std::cout << "\t" << channelNum;
 	temp1 = *iter++; //Time stamp bits 0-3
 	temp2 = *iter++; // TS 4-7
@@ -102,7 +102,7 @@ CPHAFragmentHandler::operator()(FragmentInfo& frag)
 
 	//Write the channel-number and data to the pair s_data
         event.s_data.first = channelNum;
-        event.s_data.second = Energy;
+        event.s_data.second = Energy&0x3FFF;
 
 	event.firmwareType = DppEvent::PHA;
   } else {
