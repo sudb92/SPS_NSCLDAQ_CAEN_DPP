@@ -68,6 +68,7 @@ protected:
     CAEN_DGTZ_AcqMode_t  getStartMode(std::string modeString);
     unsigned gainToCode(double value);
     uint32_t computeIoCtlMask(const std::string& enumText);
+    void processTrgOutMode(CAENPhaParameters& board, const std::string& enumText);
 };
 
 #endif

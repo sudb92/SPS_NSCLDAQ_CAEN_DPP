@@ -104,7 +104,8 @@ CAENPhaParameters::operator=(const CAENPhaParameters& rhs)
     groupconfigs[1] = rhs.groupconfigs[1];
 
     s_startMode = rhs.s_startMode;
-
+    shapTrgWidth = rhs.shapTrgWidth;
+    trgoutmode = rhs.trgoutmode;
     m_channelParameters = rhs.m_channelParameters;
     ioctlmask = rhs.ioctlmask;
 

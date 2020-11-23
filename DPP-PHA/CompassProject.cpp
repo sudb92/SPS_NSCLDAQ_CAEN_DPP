@@ -661,7 +661,7 @@ CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& 
         m_channelDefaults.polarity = pol; // Default polarity.
         
     } else if (key == "SRV_PARAM_OUT_SELECTION") {   // OUT/Sum output selection(?)
-      board.ioctlmask = computeIoCtlMask(getValue(param));
+      board.ioctlmask = computeIoCtlMask(getValue(param)); //Deprecated
         
                                            // Can be: 
         /*                                   OUT_PROPAGATION_TRIGGER - propagates the trigger.
@@ -850,35 +850,39 @@ CompassProject::processABoardParameter(pugi::xml_node param, CAENPhaParameters& 
 //New parameters
     else if (key == "SRV_PARAM_COINC_MODE"){
         std::string coincString = getValue(param);
-	std::cout << key << " " << coincString;
+	//std::cout << key << " " << coincString;
 	if(coincString == "COINC_MODE_EXT_GATE")
 	{
 		board.OnboardCoinc = CAENPhaParameters::TrgInGated;
  	        board.isExtTrgEnabled = true;
  	        board.isExtVetoEnabled = false;
-		std::cout << "\nGate!" << std::flush;
+		std::cout << "\nCoinc. mode : Trg-in Gate" << std::flush;
 	}
 	else if(coincString == "COINC_MODE_EXT_VETO")
 	{
 		board.OnboardCoinc = CAENPhaParameters::TrgInVeto;
  	        board.isExtVetoEnabled = true;
  	        board.isExtTrgEnabled = false;
-		std::cout << "\nVeto!" << std::flush;
+		std::cout << "\nCoinc. mode : Trg-in Veto" << std::flush;
 	}
 	else 
 	{
 		board.OnboardCoinc = CAENPhaParameters::None;
  	        board.isExtVetoEnabled = false;
  	        board.isExtTrgEnabled = false;
-		std::cout << "\nNone!" << std::flush;		
+		std::cout << "\nCoinc. mode : None" << std::flush;		
 	}
 
     }
     else if (key == "SRV_PARAM_COINC_TRGOUT"){
+	board.shapTrgWidth = getDoubleValue(param);
+	std::cout << "\nShaped Trigger Width : "  << board.shapTrgWidth;
     }
     else if (key == "SRV_PARAM_SW_TRG_AT_START"){
     }
     else if (key == "SRV_PARAM_TRGOUT_MODE"){
+	processTrgOutMode(board, getValue(param)); 
+
     }
     else if (key == "SW_PARAMETER_CH_LABEL"){
 	;
@@ -1157,4 +1161,40 @@ CompassProject::computeIoCtlMask(const std::string& enumValue)
    }
    
    return result;
+}
+
+void CompassProject::processTrgOutMode(CAENPhaParameters & board, const std::string& enumText)
+{
+	
+	if(enumText == "TRGOUT_MODE_LEVEL0"){
+		board.trgoutmode = CAENPhaParameters::TRGOUT_MODE_LEVEL0;
+	} else 	if(enumText == "TRGOUT_MODE_LEVEL1"){
+		board.trgoutmode = CAENPhaParameters::TRGOUT_MODE_LEVEL1;
+	}else 	if(enumText == "TRGOUT_MODE_SW_TRG"){
+		board.trgoutmode = CAENPhaParameters::TRGOUT_MODE_SW_TRG;
+	}else 	if(enumText == "TRGOUT_MODE_EXT_TRG"){
+		board.trgoutmode = CAENPhaParameters::TRGOUT_MODE_EXT_TRG;
+	}else 	if(enumText == "TRGOUT_MODE_GLOBAL_OR_TRG"){
+		board.trgoutmode = CAENPhaParameters::TRGOUT_MODE_GLOBAL_OR_TRG;
+	}else 	if(enumText == "TRGOUT_MODE_RUN"){
+		board.trgoutmode = CAENPhaParameters::TRGOUT_MODE_RUN;
+	}else 	if(enumText == "TRGOUT_MODE_DELAYED_RUN"){
+		board.trgoutmode = CAENPhaParameters::TRGOUT_MODE_DELAYED_RUN;
+	}else 	if(enumText == "TRGOUT_MODE_SAMPLE_CLK"){
+		board.trgoutmode = CAENPhaParameters::TRGOUT_MODE_SAMPLE_CLK;
+	}else 	if(enumText == "TRGOUT_MODE_PLL_CLK"){
+		board.trgoutmode = CAENPhaParameters::TRGOUT_MODE_PLL_CLK;
+	}else 	if(enumText == "TRGOUT_MODE_BUSY"){
+		board.trgoutmode = CAENPhaParameters::TRGOUT_MODE_BUSY;
+	}else 	if(enumText == "TRGOUT_MODE_PLL_UNLOCK"){
+		board.trgoutmode = CAENPhaParameters::TRGOUT_MODE_PLL_UNLOCK;
+	}else 	if(enumText == "TRGOUT_MODE_VPROBE"){
+		board.trgoutmode = CAENPhaParameters::TRGOUT_MODE_VPROBE;
+	}else 	if(enumText == "TRGOUT_MODE_SYNCIN"){
+		board.trgoutmode = CAENPhaParameters::TRGOUT_MODE_SYNCIN;
+	}else {
+      throw std::string("Unrecognized value for SRV_PARAM_TRGOUT_MODE ");
+   }
+   
+
 }

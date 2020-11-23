@@ -24,7 +24,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <stdlib.h>
+#include <chrono>
 
 //static std::ofstream _rout[7]={NULL,NULL,NULL,NULL,NULL,NULL,NULL};
 /*static std::ofstream _rout0("board0.out");
@@ -85,7 +85,7 @@ CompassEventSegment::initialize()
         project();
         
         // We need to locate the board that matches our parameters.
-        
+        std::cout << "\nInitializing board.."<<std::flush;
         CAENPhaParameters* ourBoard(nullptr);
         
         for (int i = 0; i < project.m_connections.size(); i++) {
@@ -107,11 +107,16 @@ CompassEventSegment::initialize()
         }
         // Now we can setup the board.
 
+	auto now = std::chrono::duration_cast<std::chrono::milliseconds>(
+			std::chrono::system_clock::now().time_since_epoch()
+			).count();
+
 	//Initialize counters at zero
 	for (int i =0; i < 16; i++) {
 		m_triggerCount[i] = 0;
-		m_missedTriggers[i] =0;
-	        t[i] = clock();
+		m_missedTriggers[i] = 0;
+	        t[i] =  now; //clock();
+	        tmiss[i] =  now; //clock();
 	}
         
         setupBoard(*ourBoard);
@@ -186,29 +191,40 @@ CompassEventSegment::read(void* pBuffer, size_t maxwords)
   const CAEN_DGTZ_DPP_PHA_Waveforms_t* wfData = std::get<2>(event);
 
   if (!(dppData || wfData)) {
-    reject();
+    reject();//Immediately();
     //clear();
     return 0;                            // No event.
   }
 
+ 
  // if(!(dppData->Extras == 10) )
 //     std::cout <<std::dec<< "\nsid:"<< m_id + 1 << "\tCh:" << chan <<"\tEn:" << dppData->Energy<<"\tTs:"<<dppData->TimeTag<<"\tExtr:"<<dppData->Extras<<"\tExtr2:"<<dppData->Extras2;
-//if(!(dppData->Extras == 10 || dppData->Extras == 0 ))
-  if((dppData->Extras&64)>>6 != 0)
+
+  if((dppData->Extras&64)>>6 != 0) //bit[5] of extras is trg counter, we force N=128
    {
-	//std::cout <<std::endl<<"Extr:"<<dppData->Extras<<"\tExtr2:"<<dppData->Extras2<<"\t"<<128/(double(clock() - t[chan]));
-	//m_triggerCount[chan] += 1024;	
-	m_triggerCount[chan] += 128.;
-	t[chan] = clock();
+	//m_triggerCount[chan] += 128.;
+	auto now =    std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	//if(m_id==3 && chan==0) std::cout << "\npha:" << static_cast<uint32_t>(128./((now-t[chan])*1.e-3));
+	m_triggerCount[chan] = static_cast<uint32_t>(128./((now-t[chan])*1.e-3));
+	t[chan] = now;
+   }
+  if((dppData->Extras&32)>>5 != 0) //bit[5] of extras is lost_trg counter, we force N=128
+   {
+	//m_triggerCount[chan] += 128.;
+	auto now =    std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	//if(m_id==3 && chan==0) std::cout << "\npha:" << static_cast<uint32_t>(128./((now-t[chan])*1.e-3));
+	m_missedTriggers[chan] = static_cast<uint32_t>(128./((now-tmiss[chan])*1.e-3));
+	tmiss[chan] = now;
    }
 //if(!(dppData->Extras2 == 0))
 //	std::cout <<std::endl<<"Extr:"<<dppData->Extras<<"\tExtr2:"<<dppData->Extras2;
 
-if((dppData->Extras == 10)||dppData->TimeTag==0)
+if((dppData->Extras == 10)||dppData->TimeTag==0) //Fake event with TimeTag=0 and Extras[bit1] = Extras[bit3] =1 
   {
-      reject();
+      reject();//Immediately();
       clear();
-      return 0; //Ignore if it's the 'fake event'
+      std::cout << "\n 'Fake' timestamp rollover event found.. Disable bit 26 in 0x1n80";
+    return 0; //Ignore if it's the 'fake event'
   }
 
 
@@ -219,7 +235,8 @@ if((dppData->Extras == 10)||dppData->TimeTag==0)
   int64_t offsetsubtract[8] = {0,0,0,0,0,0,0,0};
 //-48.000000	-92.000000	-48.000000	-28.000000	-4.000000	-4.000000	0.000000	
 
-  setSourceId(m_id);                     // Source id from member data.         
+  setSourceId(m_id);                     // Source id from member data.    
+  chan = 16*m_id  + chan;     
   setTimestamp(dppData->TimeTag+(offsetsubtract[(int)m_id]));        // Event timestamp - in ns (CAENPha did that).
   size_t eventSize = computeEventSize(*dppData, *wfData);
   

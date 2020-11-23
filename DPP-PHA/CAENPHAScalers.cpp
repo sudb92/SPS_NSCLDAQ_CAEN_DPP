@@ -49,6 +49,10 @@ CAENPHAScalers::read()
     for (int i =0; i < 16; i++) {
         result.push_back(m_pSegment->m_missedTriggers[i]);
     }
+  //  for (int i =0; i < 16; i++) {
+    //    result.push_back(0);
+    //}
+
     
     return result;
 }

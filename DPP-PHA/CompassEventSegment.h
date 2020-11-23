@@ -18,7 +18,7 @@
 #include <CEventSegment.h>
 #include <string>
 #include <CAENDigitizerType.h>
-#include <time.h>
+#include <chrono>
 
 class CAENPha;
 class CAENPhaParameters;
@@ -65,7 +65,9 @@ public:
      */
     uint32_t           m_triggerCount[16];
     uint32_t           m_missedTriggers[16];
-    clock_t t[16];
+    double t[16];
+    double tmiss[16];
+
     
     // Other publics:
     

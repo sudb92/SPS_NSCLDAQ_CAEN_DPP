@@ -114,9 +114,15 @@ CAENPha::setup()
   CAEN_DGTZ_ErrorCode status;
   CAEN_DGTZ_BoardInfo_t boardInfo;
 
+
   status = CAEN_DGTZ_GetInfo(m_handle, &boardInfo);
   if (status != CAEN_DGTZ_Success) {
     throw std::pair<std::string, int>("Get info failed", status);
+  }
+
+  status = CAEN_DGTZ_Reset(m_handle);
+  if (status != CAEN_DGTZ_Success) {
+    throw std::pair<std::string, int>("Board Reset failed", status);
   }
 
   // We only support the 725 and 730 (250Mhz and 500Mhz).
@@ -137,7 +143,8 @@ CAENPha::setup()
   // Set individual trigger, mb1, propagate triggers, TRG validation(?)
 
   CAEN_DGTZ_WriteRegister(m_handle, 0x8008, 0xffffffff);    // Clear all bits.
-  status = CAEN_DGTZ_WriteRegister(m_handle, 0x8000, 0x0100e0115);
+  status = CAEN_DGTZ_WriteRegister(m_handle, 0x8004, 0x0100e0115);
+ // status = CAEN_DGTZ_WriteRegister(m_handle, 0x8004, 0x14e0105);
   if (status != CAEN_DGTZ_Success) {
     throw std::pair<std::string, int>("Write board config register failed", status);
   }
@@ -160,10 +167,10 @@ CAENPha::setup()
     throw std::pair<std::string, int>("Set record length failed", status);
   }
   // Enable data flush for slow rates: (bit set register)
-  status = CAEN_DGTZ_WriteRegister(m_handle, 0x8004, 1);
-  if (status != CAEN_DGTZ_Success) {
-    throw std::pair<std::string, int>("Enable flush mode failed", status);
-  }
+  //status = CAEN_DGTZ_WriteRegister(m_handle, 0x8004, 1);
+  //if (status != CAEN_DGTZ_Success) {
+  //  throw std::pair<std::string, int>("Enable flush mode failed", status);
+  //}
  
   setTriggerAndSyncMode();
   sleep(1);
@@ -209,7 +216,7 @@ CAENPha::setup()
     throw std::pair<std::string, int>("Failed to start or arm acquisition", status);
   }
 
-
+  std::cout << "\nWaiting for acquisition run..";
 
 }
 
@@ -334,7 +341,7 @@ CAENPha::Read()
   pData->TimeTag |= m_nTimestampAdjusts[channel]; // Fold in the wraps.
   
   //pData->TimeTag *= m_nsPerTick;
-  //std::cout << "\nTimetag:"<<pData->TimeTag;
+  //std::cout << "\tTimetag:"<<pData->TimeTag;
   
   // Construct/return the result:
   
@@ -437,7 +444,7 @@ CAENPha::setTriggerAndSyncMode()
   switch (m_configuration.triggerSource) {
   case CAENPhaParameters::internal:
     std::cout << "\nPHA: Internal trigger on this board";
-    status = CAEN_DGTZ_WriteRegister(m_handle, CAEN_DGTZ_TRIGGER_SRC_ENABLE_ADD, 0x8000ffff);
+    status = CAEN_DGTZ_WriteRegister(m_handle, CAEN_DGTZ_TRIGGER_SRC_ENABLE_ADD, 0x800000FF);
     if (status != CAEN_DGTZ_Success) {
       throw std::pair<std::string, int>("Unable to enable internal trigger source", status);
     }
@@ -447,7 +454,7 @@ CAENPha::setTriggerAndSyncMode()
     setRegisterBits(0x8080, 24, 24, 1);	// supposed to fall through. This disables per channel triggers.
   case CAENPhaParameters::both:
     std::cout << "\nPHA: Both trigger on this board";
-    status = CAEN_DGTZ_WriteRegister(m_handle, CAEN_DGTZ_TRIGGER_SRC_ENABLE_ADD, 0xc000ffff); // internal/external.
+    status = CAEN_DGTZ_WriteRegister(m_handle, CAEN_DGTZ_TRIGGER_SRC_ENABLE_ADD, 0xc00000ff); // internal/external.
     //status = CAEN_DGTZ_WriteRegister(m_handle, CAEN_DGTZ_TRIGGER_SRC_ENABLE_ADD, 0x80000000); // internal/external.
     if (status != CAEN_DGTZ_Success) {
       throw std::pair<std::string, int>("Unable to set external trigger", status);
@@ -460,7 +467,8 @@ CAENPha::setTriggerAndSyncMode()
   // Trigger output mode:
   
   if (m_trgout) {
-    status = CAEN_DGTZ_WriteRegister(m_handle, 0x8110, m_enableMask);
+    status = CAEN_DGTZ_WriteRegister(m_handle, 0x8110, 0xFF&m_enableMask);
+    std::cout << "\nTrg Out Enable mask:" << std::hex << m_enableMask << std::dec;
   } else {
     setRegisterBits(0x811c, 16, 17, 0x3);     // Note status must be CAEN_DGTZ_Success from last.
   }
@@ -478,6 +486,9 @@ CAENPha::setTriggerAndSyncMode()
  uint32_t currentValue; 
  if(m_configuration.s_startMode == CAEN_DGTZ_S_IN_CONTROLLED)
 	currentValue = 0x30000;
+ if(m_configuration.s_startMode == CAEN_DGTZ_SW_CONTROLLED)
+	currentValue = 0xC100;
+
 
   if(m_configuration.OnboardCoinc == CAENPhaParameters::TrgInGated)
   {
@@ -494,6 +505,30 @@ CAENPha::setTriggerAndSyncMode()
 
     if (status != CAEN_DGTZ_Success) {
       throw std::pair<std::string, int>("Unable to set external trigger", status);
+    }
+
+    switch(m_configuration.trgoutmode)
+    {
+	case CAENPhaParameters::TRGOUT_MODE_LEVEL0:     setRegisterBits(0x811c,14, 14, 0x0); 
+							setRegisterBits(0x811c,15, 15, 0x1);
+							break;
+	case CAENPhaParameters::TRGOUT_MODE_LEVEL1:	setRegisterBits(0x811c,14, 14, 0x1); 
+							setRegisterBits(0x811c,15, 15, 0x1);
+							break;
+	case CAENPhaParameters::TRGOUT_MODE_SW_TRG:
+	case CAENPhaParameters::TRGOUT_MODE_EXT_TRG:
+	case CAENPhaParameters::TRGOUT_MODE_GLOBAL_OR_TRG:  for(int i=0; i<16; i++) 
+								setRegisterBits(0x10a0 | (i << 8), 0, 2, 0x7);
+							    setRegisterBits(0x810c | (i << 8), 0, 2, 0x7);
+								
+	case CAENPhaParameters::TRGOUT_MODE_RUN:
+	case CAENPhaParameters::TRGOUT_MODE_DELAYED_RUN: 
+	case CAENPhaParameters::TRGOUT_MODE_SAMPLE_CLK:
+	case CAENPhaParameters::TRGOUT_MODE_PLL_CLK:
+	case CAENPhaParameters::TRGOUT_MODE_BUSY:
+	case CAENPhaParameters::TRGOUT_MODE_PLL_UNLOCK:
+	case CAENPhaParameters::TRGOUT_MODE_VPROBE: 
+	case CAENPhaParameters::TRGOUT_MODE_SYNCIN:;
     }
 
 
@@ -739,6 +774,7 @@ CAENPha::setPerChannelParameters()
     }
 
     status = CAEN_DGTZ_WriteRegister(m_handle, 0x10a0 + (ch << 8), 0x10000);
+    //status = CAEN_DGTZ_WriteRegister(m_handle, 0x10a0 + (ch << 8), 0x0);
     if (status != CAEN_DGTZ_Success) {
       throw std::pair<std::string, int>("Failed to write DPP control 2 register", status);
     }
@@ -754,11 +790,16 @@ CAENPha::setPerChannelParameters()
     throw std::pair<std::string, int>("Unable to set dpp parameters", status);
   }
 
+
+
 //For parameters not defined in dppParams, we're forced to go over all the channels again. 
 for (unsigned i = 0; i < chParams.size(); i++)
 {
     int ch = chParams[i].first;
+
+
    //By default, the rollover event is turned 'ON' by Compass 1.3.0
+   //DON'T turn this on to have it agree with CoMPASS, it messes with evb!
    CAENPhaChannelParameters& params(*(chParams[i].second));
    if(params.fakeevt_ttroll_en){
 	   setRegisterBits(0x1080 | (ch<<8), 26, 26, 0);
@@ -774,26 +815,29 @@ for (unsigned i = 0; i < chParams.size(); i++)
     double pkholdoff_gen = (2*params.peakHoldoff/m_nsPerTrigger);
     setRegisterBits(0x1078 | (ch<<8),0,9,static_cast<int>(pkholdoff_gen));
 
-   setRegisterBits(0x1080 | (ch<<8), 27, 27, 1);
-   setRegisterBits(0x1080 | (ch<<8), 26, 26, 1);
+   setRegisterBits(0x1080 | (ch<<8), 27, 27, 0);
 
-//
+
+  uint32_t ShapedTriggerWidth = ((uint32_t)m_configuration.shapTrgWidth/(4*m_nsPerTick)) & 0x3ff;  
+  setRegisterBits(0x1084 | (ch<<8), 0,9,ShapedTriggerWidth);
+ // setRegisterBits(0x1084 | (ch<<8), 0,9,ShapedTriggerWidth);
+ 
   switch(m_configuration.OnboardCoinc)
   {
-	case CAENPhaParameters::TrgInGated: setRegisterBits(0x1080 | (ch<<8), 18, 18, 1); //Setup coincidences
-					    setRegisterBits(0x10a0 | (ch<<8), 14, 14, 0x0); //Unset anti coincidences
-					    setRegisterBits(0x10a0 | (ch<<8), 4, 4, 0x1); //Unset anti coincidences
-					    setRegisterBits(0x10a0 | (ch<<8), 6, 6, 0x1); //Unset anti coincidences
+	case CAENPhaParameters::TrgInGated: setRegisterBits(0x1080 | (ch<<8), 18, 19, 0x1); //Setup coincidence mode
+					    setRegisterBits(0x10a0 | (ch<<8), 14, 15, 0x0); //Unset veto, if any
+					    setRegisterBits(0x10a0 | (ch<<8), 4, 5, 0x1); //Validate from motherboard
+					    setRegisterBits(0x10a0 | (ch<<8), 6, 6, 0x1); //Enable local validation
   					    break;
-	case CAENPhaParameters::TrgInVeto:   setRegisterBits(0x1080 | (ch<<8), 18, 19, 0x3); //Setup anti coincidences
-					   setRegisterBits(0x10a0 | (ch<<8), 14, 14, 0x1); //Setup anti coincidences
-					   setRegisterBits(0x10a0 | (ch<<8), 4, 4, 0x1); //Setup anti coincidences
-					   setRegisterBits(0x10a0 | (ch<<8), 6, 6, 0x1); //Setup anti coincidences
+	case CAENPhaParameters::TrgInVeto:   setRegisterBits(0x1080 | (ch<<8), 18, 19, 0x3); //Setup anti coincidence mode
+					   setRegisterBits(0x10a0 | (ch<<8), 14, 15, 0x1); //Setup common veto among all channels. 0x810c sets the veto
+					   setRegisterBits(0x10a0 | (ch<<8), 4, 5, 0x1); //Validate from motherboard signal (ext trg)
+					   setRegisterBits(0x10a0 | (ch<<8), 6, 6, 0x1); //Enable local validation for the above thing to work
   					   break;
-	case CAENPhaParameters::None:      setRegisterBits(0x1080 | (ch<<8), 18, 19, 0x0); 
-					   setRegisterBits(0x10a0 | (ch<<8), 14, 14, 0x0); 
-					   setRegisterBits(0x10a0 | (ch<<8), 4, 4, 0x0); 
-					   setRegisterBits(0x10a0 | (ch<<8), 6, 6, 0x0); 
+	case CAENPhaParameters::None:      setRegisterBits(0x1080 | (ch<<8), 18, 19, 0x0); //Setup normal mode, no coincidence
+					   setRegisterBits(0x10a0 | (ch<<8), 14, 15, 0x0); //Disable all vetos
+					   //setRegisterBits(0x10a0 | (ch<<8), 4, 5, 0x0); //Disable trigger validation mode
+					   setRegisterBits(0x10a0 | (ch<<8), 6, 6, 0x0); //Disable local trigger validation
    }
 }    
 
