@@ -517,10 +517,10 @@ CAENPha::setTriggerAndSyncMode()
 							break;
 	case CAENPhaParameters::TRGOUT_MODE_SW_TRG:
 	case CAENPhaParameters::TRGOUT_MODE_EXT_TRG:
-	case CAENPhaParameters::TRGOUT_MODE_GLOBAL_OR_TRG:  for(int i=0; i<16; i++) 
+	case CAENPhaParameters::TRGOUT_MODE_GLOBAL_OR_TRG:  for(int i=0; i<16; i++) //Work in progress
 								setRegisterBits(0x10a0 | (i << 8), 0, 2, 0x7);
-							    setRegisterBits(0x810c | (i << 8), 0, 2, 0x7);
-								
+
+							    setRegisterBits(0x810c, 0, 2, 0x0);
 	case CAENPhaParameters::TRGOUT_MODE_RUN:
 	case CAENPhaParameters::TRGOUT_MODE_DELAYED_RUN: 
 	case CAENPhaParameters::TRGOUT_MODE_SAMPLE_CLK:
